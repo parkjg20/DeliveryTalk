@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.ETCServiceTermsActivity">
+
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F4F4F4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_weight="1">
+
+        <LinearLayout
+            android:id="@+id/privateTerm_innerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="15dp"
+            android:paddingTop="61dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="20dp"
+
+            >
+
+        <TextView
+            android:id="@+id/privateTerm_privateTermText1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/textview_border"
+            android:letterSpacing="-0.100"
+            android:lineSpacingExtra="5dp"
+            android:paddingLeft="13dp"
+            android:paddingTop="10dp"
+            android:paddingRight="13dp"
+            android:paddingBottom="11dp"
+            android:text=""
+            android:textColor="#000000"
+            android:textSize="13dp" />
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TableRow android:background="#DEDEDE">
+                    <TextView android:text="제공받는자" />
+                    <TextView android:text="제공하는 개인정보 항목"/>
+                    <TextView android:text="이용목적"/>
+                    <TextView android:text="보유 및 이용기간" />
+                </TableRow>
+                <TableRow>
+                    <TextView android:text="CJ대한통운" />
+                    <TextView android:text="송수화인의 운송장 번호" />
+                    <TextView android:text="배송조회" />
+                    <TextView android:text="서비스 이용목적 달성시까지" />
+                </TableRow>
+                <TableRow>
+                    <TextView android:text="구글" />
+                    <TextView android:text="전화번호" />
+                    <TextView android:text="회원가입시 본인인증" />
+                    <TextView android:text="서비스 이용목적 달성시까지" />
+                </TableRow>
+                <TableRow>
+                    <TextView android:text="이벤트 경품 발송 대행사" />
+                    <TextView android:text="당첨고객 전화번호" />
+                    <TextView android:text="이벤트 경품 쿠폰 문자발송" />
+                    <TextView android:text="서비스 이용목적 달성시까지" />
+                </TableRow>
+            </TableLayout>
+
+            <TextView
+                android:id="@+id/privateTerm_privateTermText2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/textview_border"
+                android:letterSpacing="-0.100"
+                android:lineSpacingExtra="5dp"
+                android:paddingLeft="13dp"
+                android:paddingTop="10dp"
+                android:paddingRight="13dp"
+                android:paddingBottom="11dp"
+                android:text=""
+                android:textColor="#000000"
+                android:textSize="13dp" />
+
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TableRow android:background="#DEDEDE">
+                    <TextView android:text="개인정보보호 담당부서" />
+                    <TextView android:text="개인정보 관리책임자"/>
+                </TableRow>
+                <TableRow>
+                    <TextView android:text="- 담당: 개인정보보호팀\n- 전화: 070-4366-3299\n- 메일 : jhjeong@data-flow.co.kr" />
+                    <TextView android:text="- 담당: 개인정보보호팀\n- 전화: 070-4366-3299\n- 메일 : jhjeong@data-flow.co.kr" />
+                </TableRow>
+            </TableLayout>
+
+            <TextView
+                android:id="@+id/privateTerm_privateTermText3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/textview_border"
+                android:letterSpacing="-0.100"
+                android:lineSpacingExtra="5dp"
+                android:paddingLeft="13dp"
+                android:paddingTop="10dp"
+                android:paddingRight="13dp"
+                android:paddingBottom="11dp"
+                android:text=""
+                android:textColor="#000000"
+                android:textSize="13dp" />
+
+
+    </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:id="@+id/privateTerm_headerLayout"
+        android:background="@drawable/bordered_bottom_background"
+        android:paddingTop="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/etc_prevButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="7.5dp"
+            android:layout_marginBottom="7dp"
+            android:background="#ffffff"
+            android:src="@drawable/btn_prev"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/etc_header_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:letterSpacing="-0.12"
+            android:text="개인정보 수집 및 이용약관"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#000000"
+            android:textSize="22dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>

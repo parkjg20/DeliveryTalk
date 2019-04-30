@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F4F4F4"
+    tools:context=".Activities.ETCActivity">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:paddingTop="5dp"
+        android:id="@+id/etc_headerLayout"
+        android:background="@drawable/bordered_bottom_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/etc_prevButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="7.5dp"
+            android:layout_marginBottom="7dp"
+            android:background="#ffffff"
+            android:src="@drawable/btn_prev"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/etc_header_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:letterSpacing="-0.12"
+            android:text="더보기"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#000000"
+            android:textSize="22dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/etc_firstLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/etc_headerLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/etc_myProfile"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/bordered_bottom_press"
+            >
+            <ImageView
+                android:id="@+id/etc_myProfileIcon"
+                android:src="@drawable/etc_ico_pro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:layout_marginLeft="14dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"/>
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:text="내 정보"
+                android:textSize="16dp"
+                android:textColor="#333333"
+                android:letterSpacing="-0.10"
+                app:layout_constraintStart_toEndOf="@+id/etc_myProfileIcon"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/etc_phonenumberText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="14dp"
+                android:textColor="#0DCCB5"
+                android:letterSpacing="-0.10"
+                android:layout_marginTop="13dp"
+                android:layout_marginRight="9dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/etc_profileButton"/>
+
+            <ImageView
+                android:id="@+id/etc_profileButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18.5dp"
+                android:layout_marginRight="12dp"
+                android:src="@drawable/etc_btn_next"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </android.support.constraint.ConstraintLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/etc_secondLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/etc_firstLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/etc_notice"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/bordered_bottom_press"
+            >
+            <ImageView
+                android:id="@+id/etc_noticeIcon"
+                android:src="@drawable/etc_ico_noti"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:layout_marginLeft="14dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"/>
+
+            <TextView
+                android:id="@+id/etc_noticeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:text="공지사항"
+                android:textSize="16dp"
+                android:textColor="#333333"
+                android:letterSpacing="-0.10"
+                app:layout_constraintStart_toEndOf="@+id/etc_noticeIcon"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/etc_noticeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18.5dp"
+                android:layout_marginRight="12dp"
+                android:src="@drawable/etc_btn_next"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/etc_question"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/bordered_bottom_press"
+            >
+            <ImageView
+                android:id="@+id/etc_questionIcon"
+                android:src="@drawable/etc_ico_ques"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:layout_marginLeft="14dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"/>
+
+            <TextView
+                android:id="@+id/etc_questionText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:text="1:1문의"
+                android:textSize="16dp"
+                android:textColor="#333333"
+                android:letterSpacing="-0.10"
+                app:layout_constraintStart_toEndOf="@+id/etc_questionIcon"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/etc_questionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18.5dp"
+                android:layout_marginRight="12dp"
+                android:src="@drawable/etc_btn_next"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </android.support.constraint.ConstraintLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/etc_thirdLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/etc_secondLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/etc_carriers"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/bordered_bottom_press"
+            >
+            <ImageView
+                android:id="@+id/etc_carriers_icon"
+                android:src="@drawable/etc_ico_deli"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:layout_marginLeft="14dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"/>
+
+            <TextView
+                android:id="@+id/etc_carriers_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="7.0dp"
+                android:layout_marginTop="12dp"
+                android:text="택배사 연결"
+                android:textSize="16dp"
+                android:textColor="#333333"
+                android:letterSpacing="-0.10"
+                app:layout_constraintStart_toEndOf="@+id/etc_carriers_icon"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/etc_carriersButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18.5dp"
+                android:layout_marginRight="12dp"
+                android:src="@drawable/etc_btn_next"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/etc_setpush"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/bordered_bottom_press"
+            >
+
+            <ImageView
+                android:id="@+id/etc_setpushIcon"
+                android:src="@drawable/etc_ico_alarm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:layout_marginLeft="14dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"/>
+
+            <TextView
+                android:id="@+id/etc_setpushText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:text="알림 설정"
+                android:textSize="16dp"
+                android:textColor="#333333"
+                android:letterSpacing="-0.10"
+                app:layout_constraintStart_toEndOf="@+id/etc_setpushIcon"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/etc_setpushButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18.5dp"
+                android:layout_marginRight="12dp"
+                android:src="@drawable/etc_btn_next"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/etc_info"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/bordered_bottom_press"
+            >
+            <ImageView
+                android:id="@+id/etc_infoIcon"
+                android:src="@drawable/etc_ico_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:layout_marginLeft="14dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"/>
+
+            <TextView
+                android:id="@+id/etc_infoText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:text="앱 정보"
+                android:textSize="16dp"
+                android:textColor="#333333"
+                android:letterSpacing="-0.10"
+                app:layout_constraintStart_toEndOf="@+id/etc_infoIcon"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/etc_infoButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18.5dp"
+                android:layout_marginRight="12dp"
+                android:src="@drawable/etc_btn_next"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </android.support.constraint.ConstraintLayout>
+
+    </LinearLayout>
+
+
+</android.support.constraint.ConstraintLayout>

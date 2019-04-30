@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F4F4F4"
+    tools:context=".Activities.ETCPushActivity">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:paddingTop="5dp"
+        android:id="@+id/push_headerLayout"
+        android:background="@drawable/bordered_bottom_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/push_prevButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="7.5dp"
+            android:layout_marginBottom="7dp"
+            android:background="#ffffff"
+            android:src="@drawable/btn_prev"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/push_header_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:letterSpacing="-0.12"
+            android:text="알림 설정"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#000000"
+            android:textSize="22dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/push_pushAllow"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/bordered_bottom_press"
+        app:layout_constraintTop_toBottomOf="@id/push_headerLayout"
+
+        >
+
+        <TextView
+            android:id="@+id/push_pushAllowText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="12dp"
+            android:letterSpacing="-0.10"
+            android:text="알림 수신 허용"
+            android:textColor="#333333"
+            android:textSize="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <com.dataflow.deliverytalk.util.SwitchButton
+            android:id="@+id/push_pushAllowButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="13dp"
+            app:sb_checked="true"
+            app:sb_button_color="#FFFFFF"
+            app:sb_shadow_color="#00000028"
+            app:sb_background="#FFF"
+            app:sb_checkline_color="#a5dc88"
+            app:sb_checked_color="#0DCCB5"
+            app:sb_uncheckcircle_color="#A36F95"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+    </android.support.constraint.ConstraintLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="13dp"
+        android:layout_marginTop="9dp"
+        android:text="배송조회 목록에서 알림 수신 개별 설정이 가능합니다."
+        android:textSize="13dp"
+        android:textColor="#9C9C9C"
+        android:letterSpacing="-0.10"
+        app:layout_constraintTop_toBottomOf="@id/push_pushAllow"
+        app:layout_constraintStart_toStartOf="parent"
+
+        />
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/push_smsAllow"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="47dp"
+            android:background="@drawable/bordered_bottom_press"
+            app:layout_constraintTop_toBottomOf="@id/push_pushAllow"
+
+            >
+
+            <TextView
+                android:id="@+id/push_smsAllowText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="12dp"
+                android:letterSpacing="-0.10"
+                android:text="SMS 광고성 정보 수신"
+                android:textColor="#333333"
+                android:textSize="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <com.dataflow.deliverytalk.util.SwitchButton
+                android:id="@+id/push_smsAllowButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="13dp"
+                app:sb_checked="true"
+                app:sb_button_color="#FFFFFF"
+                app:sb_shadow_color="#00000028"
+                app:sb_background="#FFF"
+                app:sb_checkline_color="#a5dc88"
+                app:sb_checked_color="#0DCCB5"
+                app:sb_uncheckcircle_color="#A36F95"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+        </android.support.constraint.ConstraintLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="13dp"
+        android:layout_marginTop="9dp"
+        android:text="다양한 프로모션 소식 및 신규 서비스 정보를 보내드립니다."
+        android:textSize="13dp"
+        android:textColor="#9C9C9C"
+        android:letterSpacing="-0.10"
+        app:layout_constraintTop_toBottomOf="@id/push_smsAllow"
+        app:layout_constraintStart_toStartOf="parent"
+
+        />
+
+
+</android.support.constraint.ConstraintLayout>

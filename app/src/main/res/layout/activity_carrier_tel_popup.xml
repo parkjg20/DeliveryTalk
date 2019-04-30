@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="260dp"
+    android:layout_height="wrap_content"
+    tools:context=".Activities.popup.LogoutPopupActivity">
+
+    <TextView
+        android:id="@+id/telPopup_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="17dp"
+        android:textColor="#000000"
+        android:layout_marginTop="22dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+
+        android:letterSpacing="-0.100"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        />
+
+    <Button
+        android:id="@+id/telPopup_no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="취소"
+        android:textSize="14dp"
+        android:textColor="#707070"
+        android:letterSpacing="-0.100"
+        android:background="#FFFFFF"
+        android:layout_marginTop="26dp"
+        android:stateListAnimator="@null"
+        app:layout_constraintTop_toBottomOf="@id/telPopup_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/telPopup_yes"
+
+
+        />
+    <Button
+        android:id="@+id/telPopup_yes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="통화"
+        android:textSize="14dp"
+        android:textColor="#0DCCB5"
+        android:letterSpacing="-0.100"
+        android:background="#FFFFFF"
+        android:layout_marginTop="26dp"
+        android:layout_marginLeft="96dp"
+        android:stateListAnimator="@null"
+        app:layout_constraintTop_toBottomOf="@id/telPopup_title"
+        app:layout_constraintStart_toStartOf="@id/telPopup_no"
+        app:layout_constraintEnd_toEndOf="parent"
+
+
+        />
+
+</android.support.constraint.ConstraintLayout>

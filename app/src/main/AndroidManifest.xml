@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.dataflow.deliverytalk">
+
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.DIAL_PHONE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/icon"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/lgoo_ico_cir"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".Activities.popup.SendQuestionPopupActivity"
+            android:theme="@style/myDialog"></activity>
+        <activity android:name=".Activities.MainEmptyActivity" />
+        <activity android:name=".Activities.ETCNoticeActivity" />
+        <activity
+            android:name=".Activities.popup.CarrierTelPopupActivity"
+            android:theme="@style/myDialog" />
+        <activity android:name=".Activities.ETCCarriersActivity" />
+        <activity android:name=".Activities.ETCPushActivity" />
+        <activity android:name=".Activities.ETCPrivateTermsActivity" />
+        <activity android:name=".Activities.ETCServiceTermsActivity" />
+        <activity android:name=".Activities.ETCInformationActivity" />
+        <activity android:name=".Activities.ETCQuestionActivity" />
+        <activity
+            android:name=".Activities.popup.LogoutPopupActivity"
+            android:theme="@style/myDialog" />
+        <activity android:name=".Activities.ETCProfileActivity" />
+        <activity android:name=".Activities.ETCActivity" />
+        <activity android:name=".Activities.MainActivity" />
+        <activity android:name=".Activities.IntroMessageActivity" />
+        <activity android:name=".Activities.VerifyActivity" />
+        <activity android:name=".Activities.LoginActivity" />
+        <activity android:name=".Activities.PermissionActivity" />
+        <activity android:name=".Activities.IntroActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

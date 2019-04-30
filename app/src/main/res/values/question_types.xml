@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="types" >
+        <item>개선 요청사항</item>
+        <item>오류 신고</item>
+    </string-array>
+
+</resources>

@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.IntroMessageActivity">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:paddingTop="5dp"
+        android:id="@+id/introMessage_header"
+        android:background="@drawable/bordered_bottom_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/introMessage_prevButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="7.5dp"
+            android:layout_marginBottom="7dp"
+            android:background="#ffffff"
+            android:src="@drawable/btn_prev"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/introMessage_header_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:letterSpacing="-0.12"
+            android:text="배송톡"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#000000"
+            android:textSize="22dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/introMessage_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:visibility="invisible"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/chat_ico_pro"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/introMessage_header" />
+
+    <TextView
+        android:id="@+id/introMessage_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="16dp"
+        android:text="배송톡"
+        android:textSize="14dp"
+        android:letterSpacing="-0.090"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#000000"
+        android:visibility="invisible"
+        app:layout_constraintStart_toEndOf="@+id/introMessage_profile"
+        app:layout_constraintTop_toBottomOf="@+id/introMessage_header" />
+
+    <TextView
+        android:id="@+id/introMessage_message1"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="8dp"
+        android:paddingTop="1dp"
+        android:paddingLeft="7dp"
+        android:paddingRight="9dp"
+        android:paddingBottom="5dp"
+        android:visibility="invisible"
+        android:background="@drawable/talk3"
+        android:text=""
+        android:textColor="#000000"
+        android:textSize="16dp"
+        android:letterSpacing="-0.090"
+        android:lineSpacingExtra="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/introMessage_name" />
+
+    <TextView
+        android:id="@+id/introMessage_message2"
+        android:layout_width="265dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="15dp"
+        android:paddingTop="1dp"
+        android:paddingLeft="7dp"
+        android:paddingRight="9dp"
+        android:paddingBottom="5dp"
+        android:visibility="invisible"
+        android:background="@drawable/talk3"
+        android:text=""
+        android:textColor="#000000"
+        android:textSize="16dp"
+        android:letterSpacing="-0.090"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/introMessage_message1" />
+
+    <TextView
+        android:id="@+id/introMessage_message3"
+        android:layout_width="265dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="15dp"
+        android:paddingTop="1dp"
+        android:paddingLeft="7dp"
+        android:paddingRight="9dp"
+        android:paddingBottom="5dp"
+        android:visibility="invisible"
+        android:background="@drawable/talk3"
+        android:text=""
+        android:textColor="#000000"
+        android:textSize="16dp"
+        android:letterSpacing="-0.090"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/introMessage_message2" />
+
+    <TextView
+        android:id="@+id/introMessage_message4"
+        android:layout_width="265dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/talk3"
+        android:paddingLeft="7dp"
+        android:paddingTop="1dp"
+        android:paddingRight="9dp"
+        android:paddingBottom="5dp"
+        android:visibility="invisible"
+        android:text=""
+        android:textColor="#000000"
+        android:textSize="16dp"
+        android:letterSpacing="-0.090"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/introMessage_message3" />
+
+    <TextView
+        android:id="@+id/introMessage_myMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="23dp"
+        android:background="@drawable/talk4"
+        android:paddingLeft="10dp"
+        android:paddingTop="1dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp"
+        android:visibility="invisible"
+        android:text=""
+        android:textColor="#ffffff"
+        android:textSize="16dp"
+        android:letterSpacing="-0.090"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/introMessage_message4" />
+
+    <TextView
+        android:id="@+id/introMessage_message5"
+        android:layout_width="265dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="67dp"
+        android:background="@drawable/talk3"
+        android:paddingLeft="7dp"
+        android:paddingTop="1dp"
+        android:paddingRight="9dp"
+        android:paddingBottom="5dp"
+        android:visibility="invisible"
+        android:text=""
+        android:textColor="#000000"
+        android:textSize="16dp"
+        android:letterSpacing="-0.090"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/introMessage_message4" />
+
+    <TextView
+        android:id="@+id/introMessage_message6"
+        android:layout_width="265dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="15dp"
+        android:paddingTop="1dp"
+        android:paddingLeft="7dp"
+        android:paddingRight="9dp"
+        android:paddingBottom="5dp"
+        android:visibility="invisible"
+        android:background="@drawable/talk3"
+        android:text=""
+        android:textColor="#000000"
+        android:textSize="16dp"
+        android:letterSpacing="-0.090"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/introMessage_message5" />
+
+    <LinearLayout
+        android:id="@+id/introMessage_pushLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="invisible"
+        android:gravity="center"
+        android:paddingTop="0dp"
+        android:paddingLeft="49dp"
+        android:paddingBottom="8dp"
+        android:paddingRight="49dp"
+        android:letterSpacing="-0.090"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/introMessage_yesButton"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginRight="15dp"
+            android:text="알림 허용"
+            android:textSize="18dp"
+            android:textColor="#FFFFFF"
+            android:letterSpacing="-0.120"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:background="@drawable/chat_btn_yes"
+
+            />
+
+        <Button
+            android:id="@+id/introMessage_noButton"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="다음에 할게"
+            android:textSize="18dp"
+            android:textColor="#333333"
+            android:letterSpacing="-0.120"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:background="@drawable/chat_btn_no"
+
+            />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/introMessage_startButton"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="invisible"
+        android:background="@drawable/chat_btn_start"
+        android:text="시작하기"
+        android:textSize="18dp"
+        android:textColor="#FFFFFF"
+        android:letterSpacing="-0.120"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/introMessage_pushLayout"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</android.support.constraint.ConstraintLayout>
