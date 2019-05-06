@@ -10,7 +10,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:textAlignment="center"
-        android:paddingTop="15dp"
+        android:paddingTop="18dp"
         android:text="04.30"
         android:textSize="12dp"
         android:textColor="#676767"

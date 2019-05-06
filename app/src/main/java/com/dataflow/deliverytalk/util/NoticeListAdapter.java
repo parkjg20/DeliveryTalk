@@ -18,13 +18,13 @@ import com.dataflow.deliverytalk.R;
 
 import java.util.ArrayList;
 
-public class CustomAdapter extends BaseExpandableListAdapter {
+public class NoticeListAdapter extends BaseExpandableListAdapter {
 
     private Context c;
     private ArrayList<NoticeModel> groupDatas;
     private LayoutInflater inflater;
 
-    public CustomAdapter(Context c, ArrayList<NoticeModel> groupData)
+    public NoticeListAdapter(Context c, ArrayList<NoticeModel> groupData)
     {
         this.c = c;
         groupDatas = groupData;

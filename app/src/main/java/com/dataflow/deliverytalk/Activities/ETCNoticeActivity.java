@@ -4,16 +4,12 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.View;
-import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
-import android.widget.Toast;
 
 import com.dataflow.deliverytalk.Models.NoticeModel;
 import com.dataflow.deliverytalk.R;
-import com.dataflow.deliverytalk.util.BaseExpandableAdapter;
-import com.dataflow.deliverytalk.util.CustomAdapter;
+import com.dataflow.deliverytalk.util.NoticeListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,16 +42,13 @@ public class ETCNoticeActivity extends Activity {
         ref = FirebaseDatabase.getInstance("https://deliverytalk-31595.firebaseio.com").getReference("Notice");
         initDatabase();
 
-
-
-
     }
 
     private void initViews(){
         ref.child("log").setValue("check");
 
         mListView = findViewById(R.id.notice_notices);
-        mListView.setAdapter(new CustomAdapter(ETCNoticeActivity.this, mGroupList));
+        mListView.setAdapter(new NoticeListAdapter(ETCNoticeActivity.this, mGroupList));
     }
 
     // 데이터베이스 초기화

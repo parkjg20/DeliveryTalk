@@ -40,7 +40,6 @@ public class IntroActivity extends AppCompatActivity {
                     intent = new Intent(IntroActivity.this, IntroMessageActivity.class);
                 }
                 startActivity(intent);
-                System.out.println("didi");
                 finish();
             }
         }.start();

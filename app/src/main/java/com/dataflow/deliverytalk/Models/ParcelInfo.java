@@ -3,9 +3,11 @@ package com.dataflow.deliverytalk.Models;
 public class ParcelInfo {
     String fromDate;
     String title;
+    String sender;
+    String status;
     String carrierName;
     String waybill;
-    String alarm;
+    boolean alarm;
 
     public String getFromDate() {
         return fromDate;
@@ -39,11 +41,11 @@ public class ParcelInfo {
         this.waybill = waybill;
     }
 
-    public String getAlarm() {
+    public boolean isAlarm() {
         return alarm;
     }
 
-    public void setAlarm(String alarm) {
+    public void setAlarm(boolean alarm) {
         this.alarm = alarm;
     }
 
@@ -55,5 +57,12 @@ public class ParcelInfo {
         this.status = status;
     }
 
-    String status;
+    public String getSender() {
+        return sender;
+    }
+
+    public void setSender(String sender) {
+        this.sender = sender;
+    }
+
 }

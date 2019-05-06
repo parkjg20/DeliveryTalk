@@ -136,10 +136,9 @@ public class IntroMessageActivity extends AppCompatActivity {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(int i=1; i<dataSnapshot.getChildrenCount(); i++){
-                    messages.add(dataSnapshot.child(""+i).getValue().toString());
+                for(int i=1; i<dataSnapshot.getChildrenCount(); i++) {
+                    messages.add(dataSnapshot.child("" + i).getValue().toString());
                 }
-                System.out.print("length : "+ messages.size());
 
                 initView();
             }

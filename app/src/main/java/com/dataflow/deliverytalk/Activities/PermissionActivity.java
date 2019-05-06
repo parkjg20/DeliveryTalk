@@ -141,11 +141,12 @@ public class PermissionActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(nextButton.isEnabled()){
 //                    SharedPreferences appData = getSharedPreferences("appData", MODE_PRIVATE);
-//                    SharedPreferences.Editor edt = appData.edit();
-//                    edt.putBoolean("smsFlag", smsButton.isChecked());
-//                    edt.putBoolean("pushFlag", getIntent().getBooleanExtra("push", false));
+////                    SharedPreferences.Editor edt = appData.edit();
+////                    edt.putBoolean("smsFlag", smsButton.isChecked());
+////                    edt.putBoolean("pushFlag", getIntent().getBooleanExtra("push", false));
 
                     Intent intent = new Intent(PermissionActivity.this, LoginActivity.class);
+                    intent.putExtra("phonenumber", "");
                     startActivity(intent);
                 }
             }
@@ -169,7 +170,6 @@ public class PermissionActivity extends AppCompatActivity {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                System.out.println(dataSnapshot.child("private1").getValue().toString());
                 privateTerm1.setText(dataSnapshot.child("private1").getValue().toString());
                 privateTerm2.setText(dataSnapshot.child("private2").getValue().toString());
                 privateTerm3.setText(dataSnapshot.child("private3").getValue().toString());

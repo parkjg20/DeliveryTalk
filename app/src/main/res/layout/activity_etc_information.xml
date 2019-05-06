@@ -176,7 +176,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="12dp"
-                android:text="개인정보 수집 및 이용약관"
+                android:text="최신 버전"
                 android:textSize="16dp"
                 android:textColor="#333333"
                 android:letterSpacing="-0.10"

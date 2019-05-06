@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">DeliveryTalk</string>
+    <string name="app_name">배송톡</string>
     <string name="title_activity_etcnotice">ETCNoticeActivity</string>
 </resources>
