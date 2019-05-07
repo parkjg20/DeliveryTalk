@@ -1,4 +1,4 @@
-package com.dataflow.deliverytalk.util;
+package com.dataflow.deliverytalk.util.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;

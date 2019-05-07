@@ -13,7 +13,8 @@
         android:roundIcon="@drawable/lgoo_ico_cir"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.popup.EventDialogPopup"></activity>
+        <activity android:name=".Activities.popup.EventDialogPopup"
+            android:theme="@style/myDialog"></activity>
         <activity android:name=".Activities.SelectCarrierActivity" />
         <activity
             android:name=".Activities.popup.AddWaybillPopupActivity"

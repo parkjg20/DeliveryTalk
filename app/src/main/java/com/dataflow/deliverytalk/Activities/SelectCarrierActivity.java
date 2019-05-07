@@ -16,6 +16,16 @@ public class SelectCarrierActivity extends AppCompatActivity {
     private ConstraintLayout post;
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+//        intent.putExtra("code", "");
+//        intent.putExtra("carrierName", "");
+        setResult(2, intent);
+        finish();
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_carrier);

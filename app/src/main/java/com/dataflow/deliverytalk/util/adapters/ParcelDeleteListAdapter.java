@@ -1,6 +1,7 @@
-package com.dataflow.deliverytalk.util;
+package com.dataflow.deliverytalk.util.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,18 +9,18 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.dataflow.deliverytalk.Models.ParcelModel;
 import com.dataflow.deliverytalk.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-public class ParcelListAdapter extends BaseAdapter {
+public class ParcelDeleteListAdapter extends BaseAdapter {
     // Adapter에 추가된 데이터를 저장하기 위한 ArrayList
-    private ArrayList<Map<String,String>> listViewItemList;
+    private ArrayList<ParcelModel> listViewItemList;
 
     // ListViewAdapter의 생성자
-    public ParcelListAdapter(List<Map<String,String>> datas) {
+    public ParcelDeleteListAdapter(List<ParcelModel> datas) {
         listViewItemList = (ArrayList) datas;
     }
 
@@ -45,21 +46,33 @@ public class ParcelListAdapter extends BaseAdapter {
         TextView fromDate = convertView.findViewById(R.id.tracklist_date);
         TextView title = convertView.findViewById(R.id.tracklist_title);
         TextView sender = convertView.findViewById(R.id.tracklist_sender);
-        TextView carrier = convertView.findViewById(R.id.tracklist_title);
+        TextView carrier = convertView.findViewById(R.id.tracklist_carrier);
         TextView waybill = convertView.findViewById(R.id.tracklist_waybill);
         ImageButton alarm = convertView.findViewById(R.id.tracklist_alarm);
         TextView status = convertView.findViewById(R.id.tracklist_status);
 
         // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
-        Map<String,String> parcelInfo = listViewItemList.get(position);
+        ParcelModel parcelInfo = listViewItemList.get(position);
 
         // 아이템 내 각 위젯에 데이터 반영
-        title.setText(parcelInfo.get("title"));
-        sender.setText(parcelInfo.get("sender"));
-        carrier.setText(parcelInfo.get("carrierName"));
-        waybill.setText(parcelInfo.get("waybill"));
-//        alarm.setEnabled(parcelInfo.isAlarm());
-//        status.setText(parcelInfo.getStatus());
+        title.setText(parcelInfo.getTitle());
+        if(parcelInfo.getFrom().getName().length() < 1){
+            sender.setText("발신자 정보 없음");
+        }else{
+            sender.setText(parcelInfo.getFrom().getName());
+        }
+        carrier.setText(parcelInfo.getCarrier().getName());
+        waybill.setText(parcelInfo.getWaybill());
+        alarm.setEnabled(parcelInfo.isAlarm());
+        status.setText(parcelInfo.getState().getText());
+
+        alarm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                v.setEnabled(!v.isEnabled());
+            }
+        });
 
         return convertView;
     }

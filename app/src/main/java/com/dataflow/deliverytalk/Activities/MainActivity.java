@@ -14,8 +14,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.dataflow.deliverytalk.Activities.popup.AddWaybillPopupActivity;
+import com.dataflow.deliverytalk.Models.Carrier;
+import com.dataflow.deliverytalk.Models.ParcelModel;
+import com.dataflow.deliverytalk.Models.Person;
+import com.dataflow.deliverytalk.Models.State;
 import com.dataflow.deliverytalk.R;
-import com.dataflow.deliverytalk.util.ParcelListAdapter;
+import com.dataflow.deliverytalk.util.adapters.ParcelListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,13 +28,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
+    private final String databaseUrl = "https://deliverytalk-31595.firebaseio.com";
     private ConstraintLayout gotoEtc;
     private ConstraintLayout whole;
     private ConstraintLayout onDelivery;
@@ -40,26 +43,22 @@ public class MainActivity extends AppCompatActivity {
     private TextView onDeliveryText;
     private TextView arrivedText;
 
-
-
     private ImageButton addButton;
     private boolean addButtonFlag;
     private ListView myParcelList;
-    private ParcelListAdapter adapter;
+
     private int trackingCode = 1;
 
-
-    private List<Map<String, String>> datas = new ArrayList<>();
+    private List<ParcelModel> datas = new ArrayList<>();
     private DatabaseReference ref;
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(data.getBooleanExtra("success", false)){
-            ref.child("log").setValue("check");
-        }else{
-
-        }
+        addButtonFlag = false;
+        addButton.setRotation(0);
+        ref.child("log").setValue("check");
     }
 
     @Override
@@ -69,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         // 배경색 & status bar 아이콘 색
         getWindow().setStatusBarColor(Color.parseColor("#FFFFFF"));
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-
+        ref = FirebaseDatabase.getInstance().getReference("Parcels").child(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
 
         gotoEtc = findViewById(R.id.main_footer_etc);
         whole = findViewById(R.id.main_nav_whole);
@@ -87,9 +86,6 @@ public class MainActivity extends AppCompatActivity {
         initDatabase();
         whole.setBackground(getDrawable(R.drawable.borderbottom_active));
         wholeText.setTextColor(Color.parseColor("#0DCCB5"));
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        Log.d("current", auth.getCurrentUser().getPhoneNumber());
-
     }
 
     private void setListeners(){
@@ -140,7 +136,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void navbarSelected(ConstraintLayout ele, TextView textView, int trackingCode){
         clearActive();
-        Log.d("test"," 클릭");
         ele.setBackground(getDrawable(R.drawable.borderbottom_active));
         textView.setTextColor(Color.parseColor("#0DCCB5"));
         this.trackingCode = trackingCode;
@@ -158,39 +153,46 @@ public class MainActivity extends AppCompatActivity {
 
     // 어댑터 생성
     private void onTrackingCodeChange(){
-        adapter = new ParcelListAdapter(datas);
+        List<ParcelModel> myData = new ArrayList<>();
+        switch(trackingCode){
+            case 1:
+                myData = datas;
+                break;
+            case 2:
+                // 배송중 목록
+                for(ParcelModel p : datas){
+                    if(p.getState().getId().equals("delivered"))continue;
+                    myData.add(p);
+                }
+                break;
+            case 3:
+                // 배송완료 목록
+                for(ParcelModel p : datas){
+                    if(!p.getState().getId().equals("delivered"))continue;
+                    myData.add(p);
+                }
+                break;
+        }
+        // listView 바인딩
+        ParcelListAdapter adapter;adapter = new ParcelListAdapter(myData);
         myParcelList.setAdapter(adapter);
     }
 
     // 데이터베이스 스캔
     private void initDatabase(){
-        ref = FirebaseDatabase.getInstance("https://deliverytalk-31595.firebaseio.com").getReference("Parcels").child("+1055431787");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                switch(trackingCode){
-                    case 1:
-                        Iterator<DataSnapshot> it = dataSnapshot.getChildren().iterator();
-                        while(it.hasNext()){
-                            Map<String, String> map = new HashMap<>();
-                            DataSnapshot temp = it.next();
-                            if(temp.getKey().equals("log")){
-                                break;
-                            }
-                            map.put("title", temp.child("title").getValue().toString());
-                            map.put("sender", temp.child("sender").getValue().toString());
-                            map.put("waybill", temp.child("waybill").getValue().toString());
-                            map.put("carrierName", temp.child("carrierName").getValue().toString());
-                            datas.add(map);
-                        }
-                        break;
-                    case 2:
-                        break;
-                    case 3:
-                        break;
-
+                datas.clear();
+                Iterator<DataSnapshot> it = dataSnapshot.getChildren().iterator();
+                while(it.hasNext()){
+                    DataSnapshot temp = it.next();
+                    if(temp.getKey().equals("log")) break;
+                    ParcelModel parcel = new ParcelModel();
+                    initParcel(temp, parcel);
+                    datas.add(parcel);
                 }
-                ref.child("log").setValue("check");
+
                 onTrackingCodeChange();
             }
 
@@ -199,6 +201,27 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
     }
+
+    // 배송정보 내용 등록
+    private void initParcel(DataSnapshot temp, ParcelModel parcel){
+        parcel.setTitle( temp.child("title").getValue().toString());
+        parcel.setFrom(new Person(temp.child("from").child("name").getValue().toString(), temp.child("from").child("time").getValue().toString()));
+        parcel.setWaybill(temp.child("waybill").getValue().toString());
+        parcel.setCarrier(
+                new Carrier(
+                        temp.child("carrier").child("id").getValue().toString(),
+                        temp.child("carrier").child("name").getValue().toString(),
+                        temp.child("carrier").child("tel").getValue().toString()
+                )
+        );
+//        Log.d("alarm", temp.)
+        parcel.setAlarm(temp.child("alarm").getValue().toString().trim().equals(true));
+        parcel.setState(
+                new State(
+                        temp.child("state").child("id").getValue().toString(),
+                        temp.child("state").child("text").getValue().toString()
+                ));
+    }
+
 }

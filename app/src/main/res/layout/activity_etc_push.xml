@@ -70,7 +70,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
-        <com.dataflow.deliverytalk.util.SwitchButton
+        <com.dataflow.deliverytalk.util.adapters.SwitchButton
             android:id="@+id/push_pushAllowButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -126,7 +126,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
 
-            <com.dataflow.deliverytalk.util.SwitchButton
+            <com.dataflow.deliverytalk.util.adapters.SwitchButton
                 android:id="@+id/push_smsAllowButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

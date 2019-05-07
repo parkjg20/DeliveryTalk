@@ -88,22 +88,24 @@
             <TextView
                 android:id="@+id/etc_phonenumberText"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:text=""
                 android:textSize="14dp"
                 android:textColor="#0DCCB5"
                 android:letterSpacing="-0.10"
-                android:layout_marginTop="13dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginRight="9dp"
+                android:layout_marginBottom="15dp"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/etc_profileButton"/>
+                app:layout_constraintEnd_toStartOf="@id/etc_profileButton"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
             <ImageView
                 android:id="@+id/etc_profileButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18.5dp"
-                android:layout_marginRight="12dp"
+                android:layout_marginRight="14dp"
                 android:src="@drawable/etc_btn_next"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>

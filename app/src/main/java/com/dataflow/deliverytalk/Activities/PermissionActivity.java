@@ -140,10 +140,11 @@ public class PermissionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(nextButton.isEnabled()){
-//                    SharedPreferences appData = getSharedPreferences("appData", MODE_PRIVATE);
-////                    SharedPreferences.Editor edt = appData.edit();
-////                    edt.putBoolean("smsFlag", smsButton.isChecked());
-////                    edt.putBoolean("pushFlag", getIntent().getBooleanExtra("push", false));
+                    SharedPreferences appData = getSharedPreferences("appData", MODE_PRIVATE);
+                    SharedPreferences.Editor edt = appData.edit();
+                    edt.putBoolean("smsFlag", smsButton.isChecked());
+                    edt.putBoolean("pushFlag", getIntent().getBooleanExtra("push", false));
+                    edt.commit();
 
                     Intent intent = new Intent(PermissionActivity.this, LoginActivity.class);
                     intent.putExtra("phonenumber", "");

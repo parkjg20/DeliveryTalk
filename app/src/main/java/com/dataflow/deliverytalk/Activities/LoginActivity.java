@@ -117,12 +117,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(nextButton.isEnabled()){
-//                    String code = "82";
-                    String testphone = "+16505551234";
-                    Intent intent = new Intent(LoginActivity.this, VerifyActivity.class );
+                    String code = "82";
+                        phonenumber = "+"+code+phonenumber;
 
-//                    phonenumber = "+"+code+phonenumber;
-                    intent.putExtra("phonenumber", testphone);
+                    Intent intent = new Intent(LoginActivity.this, VerifyActivity.class );
+                    intent.putExtra("phonenumber", phonenumber);
                     startActivity(intent);
                 }
             }

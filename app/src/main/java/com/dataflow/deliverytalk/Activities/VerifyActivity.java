@@ -18,8 +18,10 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dataflow.deliverytalk.Activities.popup.EventDialogPopup;
 import com.dataflow.deliverytalk.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -47,6 +49,7 @@ public class VerifyActivity extends AppCompatActivity {
     private String verificationId;
     private SharedPreferences appData;
     private CountDownTimer countDownTimer;
+    private TextView verifyTimer;
     InputMethodManager imm;
 
     @Override
@@ -61,10 +64,12 @@ public class VerifyActivity extends AppCompatActivity {
         // initialize elements
         layout = findViewById(R.id.verify_layout);
         verifyCode = findViewById(R.id.verify_code);
+        verifyTimer = findViewById(R.id.verify_timer);
         prevButton = findViewById(R.id.verify_prevButton);
         nextButton = findViewById(R.id.verify_nextButton);
         nextButton.setEnabled(false);
 
+        verifyTimer.bringToFront();
         phonenumber = getIntent().getStringExtra("phonenumber");
         Log.d("phone", "message"+phonenumber);
         if(phonenumber.isEmpty()||phonenumber.length() < 1){
@@ -78,28 +83,19 @@ public class VerifyActivity extends AppCompatActivity {
 
 
         sendVerificationCode(phonenumber);
-//        countDownTimer = new CountDownTimer(120000, 1000) {
-//            public void onTick(long millisUntilFinished) {
-//                verify_timer.setText(String.format("%d:%d", millisUntilFinished / 60000L, (millisUntilFinished % 60000L)/1000));
-//            }
-//            public void onFinish() {
-//                new AlertDialog.Builder(VerifyActivity.this)
-//                        .setTitle("제한시간 초과")
-//                        .setMessage("제한 시간이 초과되었습니다. 다시 시도하세요")
-//                        .setNeutralButton("확인", new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dlg, int sumthin) {
-//                                Intent intent = new Intent(VerifyActivity.this, LoginActivity.class);
-//                                intent.putExtra("phonenumber", phonenumber);
-//                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | intent.FLAG_ACTIVITY_CLEAR_TASK);
-//
-//                                startActivity(intent);
-//                                finish();
-//                            }
-//
-//                        } ) .show(); // 팝업창 보여줌
-//
-//            }
-//        }.start();
+        countDownTimer = new CountDownTimer(120000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                verifyTimer.setText(String.format(((((millisUntilFinished % 60000L)/1000)/10>0)?"%d:%d":"%d:0%d"),( millisUntilFinished / 60000L), (millisUntilFinished % 60000L)/1000));
+            }
+            public void onFinish() {
+                Intent intent = new Intent(VerifyActivity.this, EventDialogPopup.class);
+                intent.putExtra("title", "[error 1]");
+                intent.putExtra("content", "제한시간이 초과되었습니다.\n다시 시도하세요.");
+
+                startActivity(intent);
+                finish();
+            }
+        }.start();
     }
 
     private void setListeners(){
@@ -138,7 +134,7 @@ public class VerifyActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(nextButton.isEnabled()){
-
+                    countDownTimer.cancel();
                     String code = verifyCode.getText().toString().trim();
                     verifyCode(code);
 
@@ -180,7 +176,10 @@ public class VerifyActivity extends AppCompatActivity {
                             startActivity(intent);
                             finish();
                         }else{
-                            Toast.makeText(VerifyActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(VerifyActivity.this, EventDialogPopup.class);
+                            intent.putExtra("title","[error 1]");
+                            intent.putExtra("content", "전화번호 인증에 실패했습니다.");
+
                         }
                     }
                 });
@@ -230,6 +229,7 @@ public class VerifyActivity extends AppCompatActivity {
         appData = getSharedPreferences("appData", MODE_PRIVATE);
         SharedPreferences.Editor editor = appData.edit();
         editor.putBoolean("isLogin", true);
+        phonenumber = phonenumber.replace("+82", "0");
         editor.putString("phonenumber", phonenumber);
 
         editor.apply();

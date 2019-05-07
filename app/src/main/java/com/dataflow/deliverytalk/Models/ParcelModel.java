@@ -4,11 +4,22 @@ import java.util.List;
 
 public class ParcelModel {
 
+    private String title;
+    private String waybill;
     private Person from;
     private Person to;
     private State state;
     private List<Progress> progresses;
     private Carrier carrier;
+    private boolean alarm;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public Person getFrom() {
         return from;
@@ -48,5 +59,21 @@ public class ParcelModel {
 
     public void setCarrier(Carrier carrier) {
         this.carrier = carrier;
+    }
+
+    public String getWaybill() {
+        return waybill;
+    }
+
+    public void setWaybill(String waybill) {
+        this.waybill = waybill;
+    }
+
+    public boolean isAlarm() {
+        return alarm;
+    }
+
+    public void setAlarm(boolean alarm) {
+        this.alarm = alarm;
     }
 }

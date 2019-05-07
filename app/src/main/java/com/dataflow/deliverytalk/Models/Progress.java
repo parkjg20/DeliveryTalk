@@ -4,6 +4,7 @@ public class Progress {
     String time;
     String location;
     State status;
+    String description;
 
     public String getTime() {
         return time;
@@ -37,5 +38,4 @@ public class Progress {
         this.description = description;
     }
 
-    String description;
 }

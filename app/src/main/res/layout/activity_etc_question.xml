@@ -197,6 +197,19 @@
             app:layout_constraintStart_toEndOf="@id/question_star3"
             tools:layout_editor_absoluteY="8dp" />
 
+        <TextView
+            android:id="@+id/question_contentCounter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="13dp"
+            android:layout_marginBottom="11dp"
+            android:letterSpacing="-0.120"
+            android:text="(0/500)"
+            android:textSize="13dp"
+            android:textColor="#9C9C9C"
+            app:layout_constraintBottom_toBottomOf="@id/question_contentText"
+            app:layout_constraintEnd_toEndOf="@id/question_contentText" />
+
         <EditText
             android:id="@+id/question_contentText"
             android:layout_width="282dp"

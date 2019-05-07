@@ -86,7 +86,7 @@
             android:layout_height="42dp"
             android:layout_marginTop="9dp"
             android:layout_below="@id/login_smallText"
-            android:background="#ffffff"
+            android:background="@drawable/edit_text_border_background"
             android:paddingTop="6dp"
             android:paddingBottom="9dp"
             android:paddingLeft="8dp"

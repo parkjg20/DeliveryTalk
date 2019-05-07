@@ -9,7 +9,7 @@ import android.widget.ExpandableListView;
 
 import com.dataflow.deliverytalk.Models.NoticeModel;
 import com.dataflow.deliverytalk.R;
-import com.dataflow.deliverytalk.util.NoticeListAdapter;
+import com.dataflow.deliverytalk.util.adapters.NoticeListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

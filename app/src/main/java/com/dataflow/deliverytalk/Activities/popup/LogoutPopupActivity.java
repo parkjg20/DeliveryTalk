@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.view.Window;
 import android.widget.Button;
 
 import com.dataflow.deliverytalk.R;
+import com.dataflow.deliverytalk.util.retrofit.FunctionRetrofit;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -20,8 +22,17 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LogoutPopupActivity extends AppCompatActivity {
+
 
     private Button yesButton;
     private Button noButton;
@@ -50,44 +61,35 @@ public class LogoutPopupActivity extends AppCompatActivity {
         yesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences.Editor e = appData.edit();
-                e.putString("phonenumber", null);
-                e.putBoolean("isLogin", false);
-
-                PhoneAuthCredential credential = PhoneAuthProvider
-                        .getCredential(user.getUid(), null);
-
-                user.reauthenticate(credential)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-
-                    //재인증 성공시
+                Log.d("uid", user.getUid());
+                Call<Void> res = FunctionRetrofit.getInstance().getService().deleteUser(user.getUid());
+                res.enqueue(new Callback() {
                     @Override
-                    public void onComplete(@NonNull Task<Void> task) {
+                    public void onResponse(Call call, Response response) {
 
-                        //삭제
-                        user.delete()
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Log.d("result", "User account deleted.");
-                                }else{
-                                    Log.d("", task.getException().getStackTrace().toString());
-                                }
-                            }
-                        });
+                        Log.d("success", "suceess");
+                        SharedPreferences.Editor e = appData.edit();
+                        e.putString("phonenumber", null);
+                        e.putBoolean("isLogin", false);
+                        e.commit();
+//                        ActivityCompat.finishAffinity(LogoutPopupActivity.this);
+//                        System.exit(0);
+                    }
+
+                    @Override
+                    public void onFailure(Call call, Throwable t) {
+                        Log.e("Error", t.getMessage().toLowerCase());
                     }
                 });
 
+            }
+        });
 
 
-                noButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        finish();
-                    }
-                });
-
+        noButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }
