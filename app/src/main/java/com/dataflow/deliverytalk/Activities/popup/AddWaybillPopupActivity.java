@@ -3,7 +3,6 @@ package com.dataflow.deliverytalk.Activities.popup;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
@@ -11,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.EventLog;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -26,48 +24,51 @@ import com.dataflow.deliverytalk.Models.Person;
 import com.dataflow.deliverytalk.Models.Progress;
 import com.dataflow.deliverytalk.Models.State;
 import com.dataflow.deliverytalk.R;
+import com.dataflow.deliverytalk.util.retrofit.ParcelTrackingRetrofit;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseException;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.JsonObject;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.net.URL;
-import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AddWaybillPopupActivity extends AppCompatActivity {
 
 
     private ConstraintLayout layout;
 
-    private ParcelModel parcelModel;
     private EditText waybill;
     private TextView setCarrier;
     private EditText nickname;
 
     private Button submitButton;
-    String nicknameText;
-    String waybillText;
-    String carrierCode;
+    private String carrierCode;
     private boolean defaultAlarm;
 
-    DatabaseReference ref;
+    private DatabaseReference parcels;
+    private FirebaseFirestore db;
+    private FirebaseFirestoreSettings settings;
     SharedPreferences appData;
+
+
+    private ParcelModel parcelModel = new ParcelModel();
+
+    // 더블 클릭 방지
+    private boolean doubleClick = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,8 +86,12 @@ public class AddWaybillPopupActivity extends AppCompatActivity {
 
         defaultAlarm = appData.getBoolean("pushFlag", true);
 
-        ref = FirebaseDatabase.getInstance("https://deliverytalk-31595.firebaseio.com").getReference("Parcels").child(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
-
+        parcels = FirebaseDatabase.getInstance("https://deliverytalk-31595.firebaseio.com").getReference("Parcels").child(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+        db = FirebaseFirestore.getInstance(FirebaseApp.getInstance("[DEFAULT]"));
+        settings = new FirebaseFirestoreSettings.Builder()
+                .setTimestampsInSnapshotsEnabled(true)
+                .build();
+        db.setFirestoreSettings(settings);
         setListeners();
 
 
@@ -151,130 +156,114 @@ public class AddWaybillPopupActivity extends AppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(setCarrier.getText().equals("택배사를 선택해주세요.")){
-                    setCarrier.setError("택배사를 선택해주세요");
-                    return;
-                }
-                nicknameText = nickname.getText().toString();
-                waybillText = waybill.getText().toString();
-                Log.d("variables", "id"+carrierCode+", waybill"+waybillText);
-                new GetDataSync().execute();
+                if(!doubleClick){
+                    doubleClick = true;
+                    if(setCarrier.getText().equals("택배사를 선택해주세요.")){
+                        setCarrier.setError("택배사를 선택해주세요");
+                        doubleClick = false;
+                        return;
+                    }
 
+                    parcelTracking(carrierCode, waybill.getText().toString());
+                }
             }
         });
 
     }
 
-    private void addWayBillToDatabase(){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd;HH:mm:ss");
+    private void addWayBillToDatabase(ParcelModel parcelModel){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String time = sdf.format(new Date(System.currentTimeMillis()));
-        Log.d("time", time);
 
-        ref.child(time).setValue(parcelModel)
-        .addOnCompleteListener(new OnCompleteListener<Void>() {
+        parcels.child(time).setValue(parcelModel).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()){
-                    Log.d("result", "success");
-                    Log.d("ref", ref.getKey());
+                if(task.isSuccessful()){
                     finish();
-                } else {
-                    Log.d("result", "failure");
+                }else{
                     Intent intent = new Intent(AddWaybillPopupActivity.this, EventDialogPopup.class);
                     intent.putExtra("title", "[error 1]");
                     intent.putExtra("content","운송장 등록에 실패했습니다.");
+                    startActivity(intent);
                 }
+                doubleClick = false;
+            }
+        });
+
+
+    }
+
+    private void parcelTracking(String carrierId, final String waybill) {
+        if(carrierCode.isEmpty()||waybill.length() < 12){
+            Intent intent = new Intent(AddWaybillPopupActivity.this, EventDialogPopup.class);
+            intent.putExtra("title", "[error 1]");
+            intent.putExtra("content", "입력 값이 올바르지 않습니다.");
+            startActivity(intent);
+            doubleClick = false;
+            return;
+        }
+        Call<JsonObject> res = ParcelTrackingRetrofit.getInstance().getService().parcelTrack(carrierId, waybill);
+        res.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if(response.code() == 404){
+                    Intent intent = new Intent(AddWaybillPopupActivity.this, EventDialogPopup.class);
+                    intent.putExtra("title","[error 1]");
+                    intent.putExtra("content", "운송장 정보를 찾을 수 없습니다.\n운송장 번호가 잘못되었거나\n아직 등록되지 않은 운송장입니다.");
+                    startActivity(intent);
+                    doubleClick = false;
+                    return;
+                }
+                JsonObject json = response.body();
+                parcelModel.setTitle(nickname.getText().toString());
+                parcelModel.setWaybill(waybill);
+                parcelModel.setFrom(new Person(json.getAsJsonObject("from").getAsJsonPrimitive("name").getAsString(), json.getAsJsonObject("from").getAsJsonPrimitive("time").getAsString()));
+                parcelModel.setTo(new Person(json.getAsJsonObject("to").getAsJsonPrimitive("name").getAsString(), json.getAsJsonObject("from").getAsJsonPrimitive("time").getAsString()));
+                parcelModel.setState(new State(json.getAsJsonObject("state").getAsJsonPrimitive("id").getAsString(), json.getAsJsonObject("state").getAsJsonPrimitive("text").getAsString()));
+                List<Progress> list = new ArrayList<>();
+                for(int i = 0; i < json.getAsJsonArray("progresses").size(); i++){
+                    Progress progress = new Progress();
+                    JsonObject jary = (JsonObject) json.getAsJsonArray("progresses").get(i);
+                    progress.setTime(jary.getAsJsonPrimitive("time").getAsString());
+                    progress.setDescription(jary.getAsJsonPrimitive("description").getAsString());
+                    progress.setLocation(jary.getAsJsonObject("location").getAsJsonPrimitive("name").getAsString());
+                    progress.setStatus(new State(jary.getAsJsonObject("status").getAsJsonPrimitive("id").getAsString(),jary.getAsJsonObject("status").getAsJsonPrimitive("text").getAsString()));
+                    list.add(progress);
+                }
+                parcelModel.setProgresses(list);
+                parcelModel.setAlarm(defaultAlarm);
+
+                db.collection("Carriers")
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if(task.isSuccessful()){
+                                    for(QueryDocumentSnapshot t : task.getResult()){
+                                        if(t.getId().equals(carrierCode)){
+                                            parcelModel.setCarrier(new Carrier(
+                                                    t.getId(),
+                                                    t.getData().get("name").toString(),
+                                                    t.getData().get("tel").toString(),
+                                                    t.getData().get("logo").toString(),
+                                                    t.getData().get("homepage").toString()
+                                                )
+                                            );
+                                            addWayBillToDatabase(parcelModel);
+                                        }
+                                    }
+                                }
+                            }
+                        });
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.d("failed", "url = "+ call.request().url().toString());
             }
         });
 
     }
 
-
-    public class GetDataSync extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            try {
-                getData();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            //결과 저장하는 메소드
-            addWayBillToDatabase();
-        }
-    }
-
-    private void getData() throws IOException, JSONException {
-        JSONObject json = readJsonFromUrl("https://apis.tracker.delivery/carriers/"+carrierCode+"/tracks/"+waybillText);
-        try {
-            Log.d("length", json.length()+"");
-            if(json.length() == 1){
-                Log.d("message", json.get("message").toString());
-
-                // 존재하지 않는 운송장 팝업 출력
-
-                return;
-            }
-
-            //받아온 데이터 저장
-            parcelModel = new ParcelModel();
-            parcelModel.setTitle(nicknameText);
-            parcelModel.setWaybill(waybillText);
-            parcelModel.setFrom(new Person(json.getJSONObject("from").getString("name"), json.getJSONObject("from").getString("time")));
-            parcelModel.setTo(new Person(json.getJSONObject("to").getString("name"), json.getJSONObject("from").getString("time")));
-            parcelModel.setState(new State(json.getJSONObject("state").getString("id"), json.getJSONObject("state").getString("text")));
-            List<Progress> list = new ArrayList<>();
-            for(int i = 0; i < json.getJSONArray("progresses").length(); i++){
-                Progress progress = new Progress();
-                JSONObject jary = (JSONObject) json.getJSONArray("progresses").get(i);
-                progress.setTime(jary.getString("time"));
-                progress.setDescription(jary.getString("description"));
-                progress.setLocation(jary.getString("location"));
-                progress.setStatus(new State(jary.getJSONObject("status").getString("id"),jary.getJSONObject("status").getString("text")));
-                list.add(progress);
-            }
-            parcelModel.setProgresses(list);
-            parcelModel.setCarrier(
-                    new Carrier(
-                            json.getJSONObject("carrier").getString("id"),
-                            json.getJSONObject("carrier").getString("name"),
-                            json.getJSONObject("carrier").getString("tel")
-                    )
-            );
-            Log.d("alarm", defaultAlarm+"");
-            parcelModel.setAlarm(defaultAlarm);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    private String readAll(Reader rd) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        int cp;
-        while ((cp = rd.read()) != -1) {
-            sb.append((char) cp);
-        }
-        return sb.toString();
-    }
-
-    public JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
-        InputStream is = new URL(url).openStream();
-        try {
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-            String jsonText = readAll(rd);
-            JSONObject json = new JSONObject(jsonText);
-            return json;
-        } finally {
-            is.close();
-        }
-    }
 }

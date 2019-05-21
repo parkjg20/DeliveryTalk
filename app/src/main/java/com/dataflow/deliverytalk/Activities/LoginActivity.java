@@ -28,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     private String phonenumber;
 
     InputMethodManager imm;
+    private boolean doubleClick= false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +60,6 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         setListeners();
-
-
     }
 
     // 리스너 등록
@@ -99,7 +98,6 @@ public class LoginActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 if(s.length() == 11){
                     nextButton.setEnabled(true);
-                    phonenumber = phoneText.getText().toString().trim();
                 }
             }
         });
@@ -116,13 +114,22 @@ public class LoginActivity extends AppCompatActivity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(nextButton.isEnabled()){
-                    String code = "82";
-                        phonenumber = "+"+code+phonenumber;
+                if(!doubleClick){
+                    doubleClick = true;
+                    if(nextButton.isEnabled()){
+                        String code = "82";
+                        phonenumber = phoneText.getText().toString().trim();
+                        if(phonenumber.equals("16505551234")){
+                            phonenumber = "+16505551234";
+                        }else{
+                            phonenumber = "+"+code+phonenumber;
+                        }
 
-                    Intent intent = new Intent(LoginActivity.this, VerifyActivity.class );
-                    intent.putExtra("phonenumber", phonenumber);
-                    startActivity(intent);
+                        Intent intent = new Intent(LoginActivity.this, VerifyActivity.class );
+                        intent.putExtra("phonenumber", phonenumber);
+                        startActivity(intent);
+                    }
+                    doubleClick = false;
                 }
             }
         });

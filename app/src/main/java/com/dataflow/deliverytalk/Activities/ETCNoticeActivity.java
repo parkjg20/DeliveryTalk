@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
 
 import com.dataflow.deliverytalk.Models.NoticeModel;
 import com.dataflow.deliverytalk.R;
@@ -25,6 +26,8 @@ public class ETCNoticeActivity extends Activity {
     private ArrayList<String> mChildList;
     private ExpandableListView mListView;
 
+    private ImageButton prevButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,13 +38,22 @@ public class ETCNoticeActivity extends Activity {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
 
-
+        prevButton = findViewById(R.id.notice_prevButton);
         mGroupList = new ArrayList<NoticeModel>();
         mChildList = new ArrayList<String>();
 
         ref = FirebaseDatabase.getInstance("https://deliverytalk-31595.firebaseio.com").getReference("Notice");
         initDatabase();
+        setListeners();
 
+    }
+    private void setListeners(){
+        prevButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void initViews(){

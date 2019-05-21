@@ -62,7 +62,6 @@ public class IntroMessageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro_message);
-        System.out.println("before");
         // 배경색 & status bar 아이콘 색
         getWindow().setStatusBarColor(Color.parseColor("#FFFFFF"));
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
@@ -139,7 +138,6 @@ public class IntroMessageActivity extends AppCompatActivity {
                 for(int i=1; i<dataSnapshot.getChildrenCount(); i++) {
                     messages.add(dataSnapshot.child("" + i).getValue().toString());
                 }
-
                 initView();
             }
 
@@ -168,7 +166,7 @@ public class IntroMessageActivity extends AppCompatActivity {
                 i++;
             }
             public void onFinish() {
-                textviews[i].setVisibility(View.VISIBLE);
+                textviews[3].setVisibility(View.VISIBLE);
                 pushLayout.setVisibility(View.VISIBLE);
             }
         }.start();

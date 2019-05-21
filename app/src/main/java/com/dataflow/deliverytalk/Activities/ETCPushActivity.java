@@ -28,7 +28,9 @@ public class ETCPushActivity extends AppCompatActivity {
         smsButton = findViewById(R.id.push_smsAllowButton);
         appData = getSharedPreferences("appData", MODE_PRIVATE);
         initView();
-
+        setListeners();
+    }
+    private void setListeners(){
         prevButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,7 +44,7 @@ public class ETCPushActivity extends AppCompatActivity {
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
                 SharedPreferences.Editor edt = appData.edit();
                 edt.putBoolean("pushFlag", isChecked);
-                edt.commit();
+                edt.apply();
             }
         });
 
@@ -50,16 +52,16 @@ public class ETCPushActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
                 SharedPreferences.Editor edt = appData.edit();
-                edt.putBoolean("pushFlag", isChecked);
-                edt.commit();
+                edt.putBoolean("smsFlag", isChecked);
+                edt.apply();
             }
         });
 
     }
 
     private void initView(){
-        smsButton.setEnabled(appData.getBoolean("smsFlag",true));
-        pushButton.setEnabled(appData.getBoolean("pushFlag",true));
+        smsButton.setChecked(appData.getBoolean("smsFlag",true));
+        pushButton.setChecked(appData.getBoolean("pushFlag",true));
     }
 
 }

@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.DIAL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -13,8 +14,10 @@
         android:roundIcon="@drawable/lgoo_ico_cir"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.popup.EventDialogPopup"
-            android:theme="@style/myDialog"></activity>
+        <activity android:name=".Activities.TrackDetailActivity"></activity>
+        <activity
+            android:name=".Activities.popup.EventDialogPopup"
+            android:theme="@style/myDialog" />
         <activity android:name=".Activities.SelectCarrierActivity" />
         <activity
             android:name=".Activities.popup.AddWaybillPopupActivity"
@@ -22,7 +25,6 @@
         <activity
             android:name=".Activities.popup.SendQuestionPopupActivity"
             android:theme="@style/myDialog" />
-        <activity android:name=".Activities.MainEmptyActivity" />
         <activity android:name=".Activities.ETCNoticeActivity" />
         <activity
             android:name=".Activities.popup.CarrierTelPopupActivity"
@@ -40,16 +42,24 @@
         <activity android:name=".Activities.ETCActivity" />
         <activity android:name=".Activities.MainActivity" />
         <activity android:name=".Activities.IntroMessageActivity" />
-        <activity android:name=".Activities.VerifyActivity" />
+        <activity android:name=".Activities.VerifyActivity"
+            android:noHistory="true"/>
         <activity android:name=".Activities.LoginActivity" />
         <activity android:name=".Activities.PermissionActivity" />
-        <activity android:name=".Activities.IntroActivity">
+        <activity android:name=".Activities.IntroActivity"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service android:name=".util.PushMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"></action>
+            </intent-filter>
+        </service>
     </application>
+
 
 </manifest>

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="306dp"
-    android:layout_height="150dp"
+    android:layout_height="wrap_content"
     tools:context=".Activities.popup.EventDialogPopup">
 
     <TextView
@@ -38,7 +38,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
 
-        app:layout_constraintTop_toBottomOf="@id/eventPopup_title" />
+        app:layout_constraintTop_toBottomOf="@id/eventPopup_title"
+        app:layout_constraintBottom_toTopOf="@id/eventPopup_close"/>
 
 
     <Button

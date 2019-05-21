@@ -7,6 +7,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.dataflow.deliverytalk.Activities.popup.LogoutPopupActivity;
@@ -15,6 +16,7 @@ import com.dataflow.deliverytalk.R;
 public class ETCProfileActivity extends AppCompatActivity {
 
     private ConstraintLayout logout;
+    private ImageButton prevButton;
 
     private TextView phonenumber;
 
@@ -31,7 +33,18 @@ public class ETCProfileActivity extends AppCompatActivity {
         phonenumber = findViewById(R.id.profile_phonenumberText);
         SharedPreferences appData =  getSharedPreferences("appData",  MODE_PRIVATE);
         phonenumber.setText(appData.getString("phonenumber","정보없음"));
+        prevButton = findViewById(R.id.profile_prevButton);
 
+        setListeners();
+    }
+
+    private void setListeners(){
+        prevButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,8 +54,5 @@ public class ETCProfileActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
-
     }
 }

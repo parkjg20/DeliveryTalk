@@ -18,10 +18,12 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
-            android:id="@+id/etc_prevButton"
+            android:id="@+id/information_prevButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp"
+            android:layout_marginStart="7dp"
             android:layout_marginTop="7.5dp"
             android:layout_marginBottom="7dp"
             android:background="#ffffff"
@@ -153,7 +155,7 @@
                 android:id="@+id/information_presentVersionText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18.5dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginRight="12dp"
                 android:text="Alpha"
                 android:textColor="#9C9C9C"
@@ -187,7 +189,7 @@
                 android:id="@+id/information_latestVersionText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18.5dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginRight="12dp"
                 android:text="Alpha"
                 android:textColor="#9C9C9C"
@@ -199,5 +201,19 @@
         </android.support.constraint.ConstraintLayout>
 
     </LinearLayout>
+    
+    <TextView
+        android:id="@+id/information_note"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:layout_marginLeft="14dp"
+        android:text="최신 버전입니다."
+        android:textSize="13dp"
+        android:textColor="#9C9C9C"
+        android:letterSpacing="-0.100"
+        app:layout_constraintTop_toBottomOf="@id/information_secondLayout"
+        app:layout_constraintLeft_toLeftOf="parent"
+        />
 
 </android.support.constraint.ConstraintLayout>

@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.dataflow.deliverytalk.R;
@@ -19,6 +20,8 @@ public class ETCPrivateTermsActivity extends AppCompatActivity {
     private TextView privateTermText1;
     private TextView privateTermText2;
     private TextView privateTermText3;
+
+    private ImageButton prevButton;
 
     DatabaseReference ref;
 
@@ -35,16 +38,25 @@ public class ETCPrivateTermsActivity extends AppCompatActivity {
         privateTermText2 = findViewById(R.id.privateTerm_privateTermText2);
         privateTermText3 = findViewById(R.id.privateTerm_privateTermText3);
 
+        prevButton = findViewById(R.id.privateTerm_prevButton);
+
 
 
         ref = FirebaseDatabase.getInstance("https://deliverytalk-31595.firebaseio.com").getReference("Terms");
         initDatabase();
+        setListeners();
 
         // 서비스 약관 불러오기 & 삽입
         ref.child("log").setValue("check");
 
-
-
+    }
+    private void setListeners(){
+        prevButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     // 데이터베이스 초기화

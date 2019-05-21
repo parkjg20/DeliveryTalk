@@ -31,9 +31,8 @@ public class CarrierTelPopupActivity extends AppCompatActivity {
     private Button noButton;
     private Button yesButton;
 
-    private String tel;
-    private String carrierCode;
-    private TextView title;
+    private TextView tel;
+    private String telValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,16 +42,17 @@ public class CarrierTelPopupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_carrier_tel_popup);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
-        carrierCode = getIntent().getStringExtra("carrierCode");
-
-        if(carrierCode.isEmpty() || carrierCode.length()  < 1){
+        telValue = getIntent().getStringExtra("tel");
+        if(telValue.isEmpty() || telValue.length()  < 1){
             Toast.makeText(this, "올바르지 않은 요청입니다.", Toast.LENGTH_SHORT).show();
             finish();
         }
 
         noButton = findViewById(R.id.telPopup_no);
         yesButton = findViewById(R.id.telPopup_yes);
-        title = findViewById(R.id.telPopup_title);
+        tel = findViewById(R.id.telPopup_title);
+
+        tel.setText(telValue);
 
         noButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,69 +65,13 @@ public class CarrierTelPopupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    Intent intent = new Intent("android.intent.action.DIAL", Uri.parse("tel:"+tel));
+                    Intent intent = new Intent("android.intent.action.DIAL", Uri.parse("tel:"+telValue));
                     startActivity(intent);
+                    finish();
                 }catch(Exception e){
                     e.printStackTrace();
                 }
             }
         });
-        new GetDataSync().execute();
-
-    }
-
-    public class GetDataSync extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            try {
-                getData();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            title.setText(tel);
-        }
-    }
-
-    private void getData() throws IOException, JSONException {
-        JSONObject json = readJsonFromUrl("https://apis.tracker.delivery/carriers/"+carrierCode);
-        try {
-            String response = json.getString("tel");
-            Log.e("AAAAAAAAA %s", response);
-            tel = response;
-
-        } catch (JSONException e) {
-
-            e.printStackTrace();
-        }
-    }
-
-    private String readAll(Reader rd) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        int cp;
-        while ((cp = rd.read()) != -1) {
-            sb.append((char) cp);
-        }
-        return sb.toString();
-    }
-
-    public JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
-        InputStream is = new URL(url).openStream();
-        try {
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-            String jsonText = readAll(rd);
-            JSONObject json = new JSONObject(jsonText);
-            return json;
-        } finally {
-            is.close();
-        }
     }
 }

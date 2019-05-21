@@ -5,7 +5,16 @@ public class QuestionModel {
     private String title;
     private String content;
     private String email;
+    private String wdate;
     private boolean solved;
+
+    public String getWdate() {
+        return wdate;
+    }
+
+    public void setWdate(String wdate) {
+        this.wdate = wdate;
+    }
 
     public boolean isSolved() {
         return solved;

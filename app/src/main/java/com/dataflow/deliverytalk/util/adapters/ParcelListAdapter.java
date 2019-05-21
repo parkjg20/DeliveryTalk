@@ -1,6 +1,10 @@
 package com.dataflow.deliverytalk.util.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Parcelable;
+import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +15,18 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.dataflow.deliverytalk.Activities.TrackDetailActivity;
+import com.dataflow.deliverytalk.Models.ParcelInfo;
 import com.dataflow.deliverytalk.Models.ParcelModel;
 import com.dataflow.deliverytalk.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ParcelListAdapter extends BaseAdapter {
@@ -43,6 +55,7 @@ public class ParcelListAdapter extends BaseAdapter {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.item_tracklist, null);
         }
+        final DatabaseReference db = FirebaseDatabase.getInstance().getReference("Parcels").child(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
 
         // 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
         TextView fromDate = convertView.findViewById(R.id.tracklist_date);
@@ -52,6 +65,7 @@ public class ParcelListAdapter extends BaseAdapter {
         TextView waybill = convertView.findViewById(R.id.tracklist_waybill);
         CheckBox alarm = convertView.findViewById(R.id.tracklist_alarm);
         TextView status = convertView.findViewById(R.id.tracklist_status);
+        ConstraintLayout parcel = convertView.findViewById(R.id.tracklist_parcel);
 
         // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
         ParcelModel parcelInfo = listViewItemList.get(position);
@@ -63,15 +77,35 @@ public class ParcelListAdapter extends BaseAdapter {
         }else{
             sender.setText(parcelInfo.getFrom().getName());
         }
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = formatter.parse(parcelInfo.getFrom().getTime());
+            fromDate.setText(formatter.format(date).replace("-",".").substring(5));
+        }catch(Exception e){
+            fromDate.setText("undefined");
+        }
         carrier.setText(parcelInfo.getCarrier().getName());
         waybill.setText(parcelInfo.getWaybill());
         alarm.setChecked(parcelInfo.isAlarm());
+        alarm.setTag(parcelInfo.getParcelKey());
         status.setText(parcelInfo.getState().getText());
+        parcel.setTag(parcelInfo);
 
         alarm.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                db.child(buttonView.getTag().toString()).child("alarm").setValue(isChecked);
+            }
+        });
 
+        parcel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, TrackDetailActivity.class);
+                intent.putExtra("data", (Parcelable) v.getTag());
+                ParcelModel p = (ParcelModel) v.getTag();
+                Log.d("asdf", p.getCarrier().toString());
+                context.startActivity(intent);
             }
         });
 

@@ -14,6 +14,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -23,9 +24,12 @@ import com.dataflow.deliverytalk.Models.QuestionModel;
 import com.dataflow.deliverytalk.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,15 +41,16 @@ public class ETCQuestionActivity extends AppCompatActivity {
     private EditText content;
     private EditText email;
     private Button submitButton;
+    private ImageButton prevButton;
     private TextView contentCnt;
 
+    private boolean doubleClick = false;
     private ConstraintLayout layout;
     InputMethodManager imm;
 
     DatabaseReference ref;
 
     ArrayAdapter adapter;
-    String[] spinnerValues = {"개선 요청 사항", "오류 신고"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,7 @@ public class ETCQuestionActivity extends AppCompatActivity {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
+        prevButton = findViewById(R.id.question_prevButton);
         layout = findViewById(R.id.question_layout);
         type = findViewById(R.id.question_typeSpinner);
         title = findViewById(R.id.question_titleText);
@@ -68,12 +74,12 @@ public class ETCQuestionActivity extends AppCompatActivity {
 
         ref = FirebaseDatabase.getInstance(databaseUrl).getReference("Questions");
 
-        addListeners();
+        setListeners();
 
         adapter = new ArrayAdapter(
                 getApplicationContext(),
                 R.layout.question_spinner,
-                spinnerValues);
+                getResources().getStringArray(R.array.types));
 
         adapter.setDropDownViewResource(R.layout.question_spinner_dropdown);
         type.setAdapter(adapter);
@@ -101,36 +107,48 @@ public class ETCQuestionActivity extends AppCompatActivity {
     }
 
     private void send(){
-        System.out.println("type : "+type.getSelectedItem().toString()+ ", title : "+ title.getText().toString()+"content: "+content.getText().toString()+"\nemail"+email.getText().toString());
-        QuestionModel qm = new QuestionModel();
+        if(!doubleClick) {
+            QuestionModel qm = new QuestionModel();
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("type", type.getSelectedItem().toString());
-        map.put("content", content.getText().toString());
-        map.put("solved", false);
+            qm.setType(type.getSelectedItem().toString());
+            qm.setContent(content.getText().toString());
+            qm.setEmail( email.getText().toString());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String time = sdf.format(new Date(System.currentTimeMillis()));
+            qm.setWdate(time);
+            qm.setSolved(false);
 
-        ref.child(email.getText().toString()).child(title.getText().toString()).setValue(map)
-        .addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    Intent intent = new Intent(ETCQuestionActivity.this, SendQuestionPopupActivity.class);
-                    startActivity(intent);
-                    finish();
-                }else{
-                    Intent intent = new Intent(ETCQuestionActivity.this, EventDialogPopup.class);
-                    intent.putExtra("title", "[error 2]");
-                    intent.putExtra("content", "문의 등록 중 문제가 발생했습니다.");
-                    startActivity(intent);
-                }
-            }
-        });
-
+            ref.child(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber()).child(title.getText().toString()).setValue(qm)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Intent intent = new Intent(ETCQuestionActivity.this, SendQuestionPopupActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Intent intent = new Intent(ETCQuestionActivity.this, EventDialogPopup.class);
+                                intent.putExtra("title", "[error 2]");
+                                intent.putExtra("content", "문의 등록 중 문제가 발생했습니다.");
+                                startActivity(intent);
+                            }
+                        }
+                    });
+            doubleClick = false;
+        }
 
     }
 
 
-    private void addListeners(){
+    private void setListeners(){
+
+        prevButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

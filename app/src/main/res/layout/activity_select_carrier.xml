@@ -18,14 +18,16 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
-            android:id="@+id/etc_prevButton"
+            android:id="@+id/select_carrier_prevButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp"
+            android:layout_marginStart="7dp"
             android:layout_marginTop="7.5dp"
             android:layout_marginBottom="7dp"
-            android:background="#ffffff"
-            android:src="@drawable/btn_prev"
+            android:background="#0DCCB5"
+            android:src="@drawable/st_plus_btn_prev"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -46,85 +48,26 @@
 
     </android.support.constraint.ConstraintLayout>
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/select_carrier_cj"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@drawable/can_press_layout"
-        app:layout_constraintTop_toBottomOf="@id/select_carrier_headerLayout"
-        >
+   <android.support.constraint.ConstraintLayout
+       android:layout_width="match_parent"
+       android:layout_height="0dp"
+       app:layout_constraintVertical_weight="1"
 
-        <ImageView
-            android:id="@+id/item_carriers_cjImage"
-            android:layout_width="74dp"
-            android:layout_height="33dp"
-            android:textAlignment="center"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginBottom="7.5dp"
-            android:background="@drawable/etc_deli_ico_cj"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-
-            />
-
-        <TextView
-            android:id="@+id/item_carriers_cjName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp"
-            android:letterSpacing="-0.10"
-            android:text="CJ대한통운"
-            android:textColor="#333333"
-            android:textSize="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/item_carriers_cjImage"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </android.support.constraint.ConstraintLayout>
+       app:layout_constraintTop_toBottomOf="@id/select_carrier_headerLayout"
+       app:layout_constraintBottom_toBottomOf="parent"
+       >
 
 
+       <ListView
+           android:id="@+id/select_carrier_listview"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           app:layout_constraintTop_toTopOf="parent"
+           app:layout_constraintBottom_toBottomOf="parent">
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/select_carrier_post"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@drawable/can_press_layout"
-        app:layout_constraintTop_toBottomOf="@id/select_carrier_cj">
 
-        <ImageView
-            android:id="@+id/item_carriers_postImage"
-            android:layout_width="74dp"
-            android:layout_height="33dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="7.5dp"
-            android:background="@drawable/etc_deli_ico_post"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+       </ListView>
 
-            />
-
-        <TextView
-            android:id="@+id/item_carriers_postName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp"
-            android:letterSpacing="-0.10"
-            android:text="우체국택배"
-            android:textColor="#333333"
-            android:textSize="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/item_carriers_postImage"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </android.support.constraint.ConstraintLayout>
+   </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>
