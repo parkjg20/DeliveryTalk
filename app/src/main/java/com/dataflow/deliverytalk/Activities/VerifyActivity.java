@@ -81,7 +81,6 @@ public class VerifyActivity extends AppCompatActivity {
         verifyTimer = findViewById(R.id.verify_timer);
         prevButton = findViewById(R.id.verify_prevButton);
         nextButton = findViewById(R.id.verify_nextButton);
-        ref = FirebaseDatabase.getInstance(databaseUrl).getReference("Parcels").child(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
         nextButton.setEnabled(false);
 
         verifyTimer.bringToFront();
@@ -91,6 +90,7 @@ public class VerifyActivity extends AppCompatActivity {
             Log.e("error", "phonenumber is invalid");
             finish();
         }
+        ref = FirebaseDatabase.getInstance(databaseUrl).getReference("Parcels").child(phonenumber);
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         mAuth = FirebaseAuth.getInstance();
 

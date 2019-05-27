@@ -14,7 +14,8 @@
         android:roundIcon="@drawable/lgoo_ico_cir"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.TrackDetailActivity"></activity>
+        <activity android:name=".Activities.TrackModifyActivity"></activity>
+        <activity android:name=".Activities.TrackDetailActivity" />
         <activity
             android:name=".Activities.popup.EventDialogPopup"
             android:theme="@style/myDialog" />
@@ -42,11 +43,13 @@
         <activity android:name=".Activities.ETCActivity" />
         <activity android:name=".Activities.MainActivity" />
         <activity android:name=".Activities.IntroMessageActivity" />
-        <activity android:name=".Activities.VerifyActivity"
-            android:noHistory="true"/>
+        <activity
+            android:name=".Activities.VerifyActivity"
+            android:noHistory="true" />
         <activity android:name=".Activities.LoginActivity" />
         <activity android:name=".Activities.PermissionActivity" />
-        <activity android:name=".Activities.IntroActivity"
+        <activity
+            android:name=".Activities.IntroActivity"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -54,12 +57,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".util.PushMessagingService">
+
+        <service android:name=".util.PushMessagingService"
+            android:exported="false">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"></action>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
     </application>
-
 
 </manifest>

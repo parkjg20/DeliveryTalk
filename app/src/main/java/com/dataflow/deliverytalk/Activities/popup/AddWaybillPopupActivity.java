@@ -31,6 +31,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -40,7 +41,9 @@ import com.google.gson.JsonObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -64,7 +67,6 @@ public class AddWaybillPopupActivity extends AppCompatActivity {
     private FirebaseFirestoreSettings settings;
     SharedPreferences appData;
 
-
     private ParcelModel parcelModel = new ParcelModel();
 
     // 더블 클릭 방지
@@ -78,7 +80,6 @@ public class AddWaybillPopupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_waybill_popup);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         appData = getSharedPreferences("appData", MODE_PRIVATE);
-
         waybill = findViewById(R.id.addwaybill_waybill);
         nickname = findViewById(R.id.addwaybill_productNickname);
         setCarrier = findViewById(R.id.addwaybill_carrier);
@@ -86,7 +87,7 @@ public class AddWaybillPopupActivity extends AppCompatActivity {
 
         defaultAlarm = appData.getBoolean("pushFlag", true);
 
-        parcels = FirebaseDatabase.getInstance("https://deliverytalk-31595.firebaseio.com").getReference("Parcels").child(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+        parcels = FirebaseDatabase.getInstance().getReference("Parcels").child(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
         db = FirebaseFirestore.getInstance(FirebaseApp.getInstance("[DEFAULT]"));
         settings = new FirebaseFirestoreSettings.Builder()
                 .setTimestampsInSnapshotsEnabled(true)
@@ -171,7 +172,7 @@ public class AddWaybillPopupActivity extends AppCompatActivity {
 
     }
 
-    private void addWayBillToDatabase(ParcelModel parcelModel){
+    private void addWayBillToDatabase(@NonNull ParcelModel parcelModel){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String time = sdf.format(new Date(System.currentTimeMillis()));
 
@@ -202,11 +203,17 @@ public class AddWaybillPopupActivity extends AppCompatActivity {
             doubleClick = false;
             return;
         }
+        Log.d("before_parcel_track", carrierId+", "+waybill);
         Call<JsonObject> res = ParcelTrackingRetrofit.getInstance().getService().parcelTrack(carrierId, waybill);
         res.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if(response.code() == 404){
+                    try {
+                        Log.e("add_waybill", response.code() + ", " + response.errorBody().string());
+                    }catch(Exception e){
+                        Log.e("add_waybill_exception", e.getStackTrace().toString());
+                    }
                     Intent intent = new Intent(AddWaybillPopupActivity.this, EventDialogPopup.class);
                     intent.putExtra("title","[error 1]");
                     intent.putExtra("content", "운송장 정보를 찾을 수 없습니다.\n운송장 번호가 잘못되었거나\n아직 등록되지 않은 운송장입니다.");

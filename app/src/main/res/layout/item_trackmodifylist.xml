@@ -2,12 +2,12 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="74dp"
-    android:id="@+id/tracklist_parcel"
+    android:id="@+id/modifylist_parcel"
     android:background="@drawable/pressable_layout"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
-        android:id="@+id/tracklist_date"
+        android:id="@+id/modifylist_date"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:textAlignment="center"
@@ -27,7 +27,7 @@
         />
 
     <TextView
-        android:id="@+id/tracklist_title"
+        android:id="@+id/modifylist_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="9dp"
@@ -38,10 +38,10 @@
         android:letterSpacing="-0.10"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/tracklist_date"/>
+        app:layout_constraintStart_toEndOf="@id/modifylist_date"/>
 
     <TextView
-        android:id="@+id/tracklist_sender"
+        android:id="@+id/modifylist_sender"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
@@ -50,11 +50,11 @@
         android:textColor="#000000"
         android:letterSpacing="-0.10"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintTop_toBottomOf="@id/tracklist_title"
-        app:layout_constraintStart_toEndOf="@id/tracklist_date"/>
+        app:layout_constraintTop_toBottomOf="@id/modifylist_title"
+        app:layout_constraintStart_toEndOf="@id/modifylist_date"/>
 
     <TextView
-    android:id="@+id/tracklist_carrier"
+    android:id="@+id/modifylist_carrier"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginLeft="5dp"
@@ -62,11 +62,11 @@
     android:textSize="12dp"
     android:textColor="#8D8D8D"
     android:letterSpacing="-0.100"
-    app:layout_constraintTop_toBottomOf="@id/tracklist_sender"
-    app:layout_constraintStart_toEndOf="@id/tracklist_date"/>
+    app:layout_constraintTop_toBottomOf="@id/modifylist_sender"
+    app:layout_constraintStart_toEndOf="@id/modifylist_date"/>
 
     <TextView
-        android:id="@+id/tracklist_waybill"
+        android:id="@+id/modifylist_waybill"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
@@ -74,23 +74,11 @@
         android:textSize="12dp"
         android:textColor="#8D8D8D"
         android:letterSpacing="-0.100"
-        app:layout_constraintTop_toBottomOf="@id/tracklist_sender"
-        app:layout_constraintStart_toEndOf="@id/tracklist_carrier"/>
-
-    <CheckBox
-        android:id="@+id/tracklist_alarm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginRight="15dp"
-        android:button="@null"
-        android:background="@drawable/st_btn_alarm"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintTop_toBottomOf="@id/modifylist_sender"
+        app:layout_constraintStart_toEndOf="@id/modifylist_carrier"/>
 
     <TextView
-        android:id="@+id/tracklist_status"
+        android:id="@+id/modifylist_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="10dp"

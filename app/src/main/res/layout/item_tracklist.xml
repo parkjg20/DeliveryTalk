@@ -81,13 +81,14 @@
         android:id="@+id/tracklist_alarm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginRight="15dp"
-        android:button="@null"
-        android:background="@drawable/st_btn_alarm"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="5dp"
+        android:button="@drawable/st_btn_alarm"
+        android:gravity="right|center"
+        android:foregroundGravity="center_horizontal"
+        android:padding="5dp"
         app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tracklist_status"
