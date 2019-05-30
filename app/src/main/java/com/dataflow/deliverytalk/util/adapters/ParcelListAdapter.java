@@ -19,6 +19,7 @@ import com.dataflow.deliverytalk.Activities.TrackDetailActivity;
 import com.dataflow.deliverytalk.Models.ParcelInfo;
 import com.dataflow.deliverytalk.Models.ParcelModel;
 import com.dataflow.deliverytalk.R;
+import com.dataflow.deliverytalk.util.AppDataControlService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -32,9 +33,8 @@ import java.util.List;
 public class ParcelListAdapter extends BaseAdapter {
     // Adapter에 추가된 데이터를 저장하기 위한 ArrayList
     private ArrayList<ParcelModel> listViewItemList;
-
     // ListViewAdapter의 생성자
-    public ParcelListAdapter(List<ParcelModel> datas) {
+    public ParcelListAdapter(List<ParcelModel> datas, Context context) {
         listViewItemList = (ArrayList) datas;
     }
 
@@ -86,10 +86,10 @@ public class ParcelListAdapter extends BaseAdapter {
         }
         carrier.setText(parcelInfo.getCarrier().getName());
         waybill.setText(parcelInfo.getWaybill());
-        alarm.setChecked(parcelInfo.isAlarm());
         alarm.setTag(parcelInfo.getParcelKey());
+        alarm.setChecked(parcelInfo.isAlarm());
         status.setText(parcelInfo.getState().getText());
-        parcel.setTag(parcelInfo);
+        parcel.setTag(parcelInfo.getParcelKey());
 
         alarm.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -102,9 +102,7 @@ public class ParcelListAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, TrackDetailActivity.class);
-                intent.putExtra("data", (Parcelable) v.getTag());
-                ParcelModel p = (ParcelModel) v.getTag();
-                Log.d("asdf", p.getCarrier().toString());
+                intent.putExtra("key", (String) v.getTag());
                 context.startActivity(intent);
             }
         });

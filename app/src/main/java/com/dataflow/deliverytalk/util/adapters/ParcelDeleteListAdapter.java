@@ -66,7 +66,6 @@ public class ParcelDeleteListAdapter extends BaseAdapter {
         TextView sender = convertView.findViewById(R.id.modifylist_sender);
         TextView carrier = convertView.findViewById(R.id.modifylist_carrier);
         TextView waybill = convertView.findViewById(R.id.modifylist_waybill);
-//        ImageButton alarm = convertView.findViewById(R.id.modifylist_alarm);
         TextView status = convertView.findViewById(R.id.modifylist_status);
 
 
@@ -78,7 +77,7 @@ public class ParcelDeleteListAdapter extends BaseAdapter {
 
 
         // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
-        ParcelModel parcelInfo = listViewItemList.get(position);
+        ParcelModel parcelInfo = listViewItemList.get(pos);
 
         // 아이템 내 각 위젯에 데이터 반영
         title.setText(parcelInfo.getTitle());
@@ -94,14 +93,17 @@ public class ParcelDeleteListAdapter extends BaseAdapter {
         String json =
                 "{" +
                 "   \"flag\": \""+flag+"\"," +
-                "   \"position\": \""+position+"\"," +
+                "   \"position\": \""+pos+"\"," +
                 "   \"key\": \""+parcelInfo.getParcelKey()+"\"" +
                 "}";
         layout.setTag(json);
         if(flag){
             layout.setBackgroundColor(Color.parseColor("#EFEFEF"));
-            deleteList.put(position, parcelInfo.getParcelKey());
+        }else{
+            layout.setBackgroundColor(Color.parseColor((deleteList.containsKey(pos))?"#EFEFEF":"#FFFFFF"));
         }
+        buttonStateChange(dt, di, wi);
+
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,15 +128,12 @@ public class ParcelDeleteListAdapter extends BaseAdapter {
                 String ret =
                         "{" +
                         "   \"flag\": \""+selected+"\"," +
-                        "   \"position\": \""+position+"\"," +
+                        "   \"position\": \""+pos+"\"," +
                         "   \"key\": \""+key+"\"" +
                         "}";
                 v.setTag(ret);
-                Log.d("modify_map", deleteList.toString());
             }
         });
-        buttonStateChange(dt, di, wi);
-
 
         return convertView;
     }

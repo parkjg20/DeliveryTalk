@@ -122,7 +122,7 @@ public class LoginActivity extends AppCompatActivity {
                         if(phonenumber.equals("16505551234")){
                             phonenumber = "+16505551234";
                         }else{
-                            phonenumber = "+"+code+phonenumber;
+                            phonenumber = "+"+code+phonenumber.substring(1);
                         }
 
                         Intent intent = new Intent(LoginActivity.this, VerifyActivity.class );

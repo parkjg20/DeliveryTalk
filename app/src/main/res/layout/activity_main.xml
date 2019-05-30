@@ -238,13 +238,13 @@
         <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
+            android:paddingTop="2dp"
             android:id="@+id/main_footer"
             android:layout_width="match_parent"
             android:layout_height="65dp"
-            android:background="#FFFFFF"
+            android:background="@drawable/border_top_white"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_editor_absoluteY="0dp"
-            tools:layout_editor_absoluteX="0dp">
+            >
 
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/main_footer_shoptalk"
@@ -291,6 +291,7 @@
                 android:id="@+id/main_footer_track"
                 android:layout_width="135dp"
                 android:layout_height="match_parent"
+                android:background="#FFFFFF"
                 android:layout_marginLeft="2dp"
                 app:layout_constraintEnd_toStartOf="@+id/main_footer_etc"
                 app:layout_constraintStart_toEndOf="@id/main_footer_shoptalk"
@@ -330,7 +331,6 @@
                 android:id="@+id/main_footer_etc"
                 android:layout_width="135dp"
                 android:layout_height="match_parent"
-                android:layout_margin="0dp"
                 android:background="@drawable/pressable_layout"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

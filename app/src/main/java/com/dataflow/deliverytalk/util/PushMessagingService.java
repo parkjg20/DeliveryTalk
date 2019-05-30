@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.dataflow.deliverytalk.Activities.MainActivity;
+import com.dataflow.deliverytalk.Activities.TrackDetailActivity;
 import com.dataflow.deliverytalk.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -47,7 +49,18 @@ public class PushMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
         Log.d("payload", remoteMessage.getData().toString());
-        sendNotification(remoteMessage.getData().get("title"), remoteMessage.getData().get("content"));
+
+        String key = remoteMessage.getData().get("key");
+        boolean userPush = new AppDataControlService(getSharedPreferences("appData", MODE_PRIVATE)).getPushFlag();
+        Log.d("push_allow", userPush+"");
+        if(userPush){
+            sendNotification(key, remoteMessage.getData().get("title"), remoteMessage.getData().get("content"));
+        }else{
+            boolean parcelPush = remoteMessage.getData().get("alarm").equals("true");
+            if(parcelPush){
+                sendNotification(key, remoteMessage.getData().get("title"), remoteMessage.getData().get("content"));
+            }
+        }
     }
 
     private void sendTokenToServer(String token){
@@ -55,8 +68,9 @@ public class PushMessagingService extends FirebaseMessagingService {
     }
 
 
-    private void sendNotification(String title, String text) {
-        Intent intent = new Intent(this, MainActivity.class);
+    private void sendNotification(String key, String title, String text) {
+        Intent intent = new Intent(this, TrackDetailActivity.class);
+        intent.putExtra("key", key);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
@@ -79,12 +93,11 @@ public class PushMessagingService extends FirebaseMessagingService {
         // Since android Oreo notification channel is needed.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(channelId,
-                    "Channel human readable title",
+                    "배송조회",
                     NotificationManager.IMPORTANCE_DEFAULT);
             notificationManager.createNotificationChannel(channel);
         }
         notificationManager.notify(id /* ID of notification */, notificationBuilder.build());
         id = (id > 20)?0:id+1;
-        Log.d("push", "실행");
     }
 }

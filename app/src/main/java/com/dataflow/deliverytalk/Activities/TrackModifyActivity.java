@@ -26,6 +26,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,6 +90,7 @@ public class TrackModifyActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setResult(3, intent);
+                deleteList.clear();
                 finish();
             }
         });
@@ -96,15 +98,30 @@ public class TrackModifyActivity extends AppCompatActivity {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!doubleClick){
+                if(!doubleClick) {
                     doubleClick = true;
-                    for(final Integer key :deleteList.keySet()){
+                    final List<Integer> list = new ArrayList<>();
+                    for (final Integer key : deleteList.keySet()) {
+                        list.add(key);
+                    }
+                    for (int i = 0; i < list.size(); i++) {
+                        for (int j = i + 1; j < list.size(); j++) {
+                            if (list.get(i) < list.get(j)) {
+                                int temp = list.get(j);
+                                list.set(j, list.get(i));
+                                list.set(i, temp);
+                            }
+                        }
+                    }
+                    for (final Integer key : list) {
                         ref.child(deleteList.get(key)).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
-                                if(task.isSuccessful()){
+                                if (task.isSuccessful()) {
                                     adapter.deleteItem(key);
-                                }else{
+                                    deleteList.remove(key);
+
+                                } else {
                                     Intent intent = new Intent(TrackModifyActivity.this, EventDialogPopup.class);
                                     intent.putExtra("title", "[error 2]");
                                     intent.putExtra("content", "택배 삭제 도중 문제가 발생했습니다.");
@@ -128,6 +145,9 @@ public class TrackModifyActivity extends AppCompatActivity {
                     doubleClick = true;
                     if(!(boolean)v.getTag()){
                         v.setTag(true);
+                        for(int i = 0; i < datas.size(); i++){
+                            deleteList.put(i, datas.get(i).getParcelKey());
+                        }
                         addAdapter(true);
                     }else{
                         v.setTag(false);
@@ -136,6 +156,7 @@ public class TrackModifyActivity extends AppCompatActivity {
                     }
 
                     doubleClick = false;
+
                 }
             }
         });

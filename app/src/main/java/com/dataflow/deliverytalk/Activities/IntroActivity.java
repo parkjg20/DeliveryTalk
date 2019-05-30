@@ -36,7 +36,14 @@ public class IntroActivity extends AppCompatActivity {
         appData = getSharedPreferences("appData", MODE_PRIVATE);
         isLogin = appData.getBoolean("isLogin",false);
 
-        Intent intent;
+        CountDownTimer cnt = new CountDownTimer(1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
 //        인터넷 연결 체크하는 부분 ( 추후에 작성 )
 //        if(!result) {
 //            intent = new Intent(IntroActivity.this, EventDialogPopup.class);
@@ -46,13 +53,18 @@ public class IntroActivity extends AppCompatActivity {
 //            finish();
 //        }else{
 //            Log.d("internet", "인터넷 연결 확인");
-            if(isLogin){
-                intent = new Intent(IntroActivity.this, MainActivity.class);
-            }else{
-                intent = new Intent(IntroActivity.this, IntroMessageActivity.class);
-            }
-            startActivity(intent);
-            finish();
+
+                Intent intent;
+                if(isLogin){
+                    intent = new Intent(IntroActivity.this, MainActivity.class);
+                }else{
+                    intent = new Intent(IntroActivity.this, IntroMessageActivity.class);
+                }
+                startActivity(intent);
+                finish();
 //        }
+            }
+        }.start();
+
     }
 }

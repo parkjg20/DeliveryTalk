@@ -2,22 +2,14 @@ package com.dataflow.deliverytalk.Activities;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.CountDownTimer;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Layout;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -26,40 +18,35 @@ import android.widget.TextView;
 
 import com.dataflow.deliverytalk.Activities.popup.AddWaybillPopupActivity;
 import com.dataflow.deliverytalk.Activities.popup.EventDialogPopup;
+import com.dataflow.deliverytalk.Models.AlarmModel;
 import com.dataflow.deliverytalk.Models.Carrier;
 import com.dataflow.deliverytalk.Models.ParcelModel;
 import com.dataflow.deliverytalk.Models.Person;
 import com.dataflow.deliverytalk.Models.Progress;
 import com.dataflow.deliverytalk.Models.State;
 import com.dataflow.deliverytalk.R;
+import com.dataflow.deliverytalk.util.adapters.AlarmListAdapter;
 import com.dataflow.deliverytalk.util.adapters.ParcelListAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.common.collect.Lists;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
-
+import com.google.firebase.iid.InstanceIdResult;;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.zip.Inflater;
-
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -78,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
     private View drawerView;
+    private ListView drawerList;
+    private TextView drawerText;
 
     private ImageButton alarmOpenButton;
     private ImageButton alarmCloseButton;
@@ -91,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<ParcelModel> myData = new ArrayList<>();
     private List<ParcelModel> datas = new ArrayList<>();
+    private List<AlarmModel> pushList = new ArrayList<>();
 
 
     private boolean init = false;
@@ -101,14 +91,11 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseFirestoreSettings settings;
 
+    private String token;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 1){
-            addButtonFlag = false;
-            addButton.setRotation(0);
-        }
-
         if(requestCode==3){
             refresh();
         }
@@ -132,6 +119,8 @@ public class MainActivity extends AppCompatActivity {
         // Drawer ( 내 알림 )
         drawerLayout = findViewById(R.id.main_layout);
         drawerView = findViewById(R.id.main_drawer);
+        drawerList = findViewById(R.id.main_drawer_listview);
+        drawerText = findViewById(R.id.main_drawer_text);
         alarmOpenButton = findViewById(R.id.main_alarmButton);
         alarmCloseButton = findViewById(R.id.main_drawer_closeButton);
 
@@ -175,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         // Get new Instance ID token
-                        String token = task.getResult().getToken();
+                        token = task.getResult().getToken();
                         ref.setValue(token);
                     }
                 });
@@ -222,15 +211,8 @@ public class MainActivity extends AppCompatActivity {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!addButtonFlag) {
-                    addButtonFlag = true;
-                    addButton.setRotation(45);
-                    Intent intent = new Intent(MainActivity.this, AddWaybillPopupActivity.class);
-                    startActivityForResult(intent, 1);
-                } else {
-                    addButtonFlag = false;
-                    addButton.setRotation(0);
-                }
+                Intent intent = new Intent(MainActivity.this, AddWaybillPopupActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -259,6 +241,61 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onDrawerOpened(@NonNull View view) {
+                DatabaseReference alarms = FirebaseDatabase.getInstance().getReference("Messages").child(token);
+                alarms.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        pushList.clear();
+                        for (DataSnapshot t1 : dataSnapshot.getChildren()) {
+                            String key = t1.getKey();
+                            for(DataSnapshot t2 : t1.getChildren()){
+                                String date = t2.getKey();
+                                for(DataSnapshot t3 : t2.getChildren()){
+                                    DataSnapshot temp = t3.child("data");
+
+                                    AlarmModel model = new AlarmModel();
+                                    model.setKey(key);
+                                    model.setTime(date+" "+t3.getKey());
+                                    model.setType(Integer.parseInt(temp.child("type").getValue().toString()));
+
+                                    try{
+                                        /*
+                                         * DateFormatter 에러로 인해 수동 변환
+                                         * 추후에 변경 또는 유지
+                                         * 작성일 : 2019-05-29
+                                         */
+                                        String updateTime = temp.child("updateTime").getValue().toString();
+                                        updateTime = updateTime.substring(updateTime.indexOf("-")+1, updateTime.lastIndexOf(":",updateTime.length()-5));
+                                        updateTime = updateTime.replaceAll("-", "/");
+                                        updateTime = updateTime.replace("T", " ");
+                                        model.setUpdateTime(updateTime);
+                                    }catch(Exception e){
+                                        e.printStackTrace();
+                                    }
+
+                                    model.setLocation(temp.child("location").getValue().toString());
+                                    model.setTitle(temp.child("title").getValue().toString());
+                                    model.setAlarm(temp.child("alarm").getValue().toString().equals("true"));
+                                    model.setContent(temp.child("content").getValue().toString());
+                                    pushList.add(model);
+                                }
+                            }
+                        }
+
+                        if(pushList.size() > 0){
+                            AlarmListAdapter adapter = new AlarmListAdapter(pushList);
+                            drawerText.setVisibility(View.INVISIBLE);
+                            drawerList.setAdapter(adapter);
+                        }else{
+                            drawerList.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
             }
 
             @Override
@@ -273,6 +310,7 @@ public class MainActivity extends AppCompatActivity {
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                refresh();
                 swipeLayout.setRefreshing(false);
             }
         });
@@ -360,7 +398,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (myData.size() > 0) {
             // listView 바인딩
-            ParcelListAdapter adapter = new ParcelListAdapter(myData);;
+            ParcelListAdapter adapter = new ParcelListAdapter(myData, this);
             findViewById(R.id.main_empty).setVisibility(View.GONE);
             adapter.notifyDataSetChanged();
             myParcelList.setVisibility(View.VISIBLE);
@@ -410,8 +448,6 @@ public class MainActivity extends AppCompatActivity {
                 ));
         datas.add(parcel);
     }
-
-
 
 }
 

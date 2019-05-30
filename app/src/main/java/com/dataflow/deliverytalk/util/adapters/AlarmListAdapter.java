@@ -2,7 +2,7 @@ package com.dataflow.deliverytalk.util.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,20 +11,21 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.dataflow.deliverytalk.Activities.popup.CarrierTelPopupActivity;
-import com.dataflow.deliverytalk.Models.Alarm;
-import com.dataflow.deliverytalk.Models.Carrier;
+import com.dataflow.deliverytalk.Activities.TrackDetailActivity;
+import com.dataflow.deliverytalk.Models.AlarmModel;
 import com.dataflow.deliverytalk.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class AlarmListAdapter extends BaseAdapter {
     // Adapter에 추가된 데이터를 저장하기 위한 ArrayList
-    private List<Alarm> listViewItemList;
+    private List<AlarmModel> listViewItemList;
 
     // ListViewAdapter의 생성자
-    public AlarmListAdapter(List<Alarm> datas) {
+    public AlarmListAdapter(List<AlarmModel> datas) {
         listViewItemList = (ArrayList) datas;
     }
 
@@ -52,9 +53,11 @@ public class AlarmListAdapter extends BaseAdapter {
         ImageButton select = convertView.findViewById(R.id.alarm_select);
 
         // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
-        Alarm alarm = listViewItemList.get(position);
+        AlarmModel alarm = listViewItemList.get(position);
 
         // 아이템 내 각 위젯에 데이터 반영
+
+
         switch (alarm.getType()){
             case 1:
                 ico.setImageDrawable(context.getDrawable(R.drawable.nav4_ico_al));
@@ -63,13 +66,19 @@ public class AlarmListAdapter extends BaseAdapter {
                 ico.setImageDrawable(context.getDrawable(R.drawable.nav4_ico_noti));
                 break;
         }
-        content.setText(alarm.getContent());
-        select.setTag(alarm.getParcelId());
+        String ment = "\""+alarm.getTitle()+"\"\n"+
+                alarm.getUpdateTime()+" "+alarm.getLocation()+" "+alarm.getContent();
+
+        content.setText(ment);
+        select.setTag(alarm.getKey());
 
         select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                Intent intent = new Intent(context, TrackDetailActivity.class);
+                intent.putExtra("key", v.getTag().toString());
+                context.startActivity(intent);
             }
         });
 

@@ -186,7 +186,7 @@ public class VerifyActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-//                            countDownTimer.cancel();
+                            countDownTimer.cancel();
                             Intent intent = new Intent(VerifyActivity.this, MainActivity.class);
                             initConfig();
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

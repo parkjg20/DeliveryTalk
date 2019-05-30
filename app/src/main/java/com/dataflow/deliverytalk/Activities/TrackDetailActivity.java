@@ -2,6 +2,7 @@ package com.dataflow.deliverytalk.Activities;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,20 +12,28 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dataflow.deliverytalk.Activities.popup.CarrierTelPopupActivity;
+import com.dataflow.deliverytalk.Models.Carrier;
 import com.dataflow.deliverytalk.Models.ParcelModel;
+import com.dataflow.deliverytalk.Models.Person;
 import com.dataflow.deliverytalk.Models.Progress;
+import com.dataflow.deliverytalk.Models.State;
 import com.dataflow.deliverytalk.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 public class TrackDetailActivity extends AppCompatActivity {
-
-
     // in headerlayout....
     private TextView title;
     private ImageButton prevButton;
@@ -52,7 +61,7 @@ public class TrackDetailActivity extends AppCompatActivity {
         getWindow().setStatusBarColor(Color.parseColor("#FFFFFF"));
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
-        ParcelModel data = getIntent().getParcelableExtra("data");
+        String key = getIntent().getStringExtra("key");
         title = findViewById(R.id.detail_header_text);
         prevButton = findViewById(R.id.detail_prevButton);
 
@@ -64,10 +73,9 @@ public class TrackDetailActivity extends AppCompatActivity {
         callButton = findViewById(R.id.detail_info_waybill_callButton);
 
 
-
         getStateViews();
         setListeners();
-        initViews(data);
+        getData(key);
 
     }
     private void getStateViews(){
@@ -77,6 +85,55 @@ public class TrackDetailActivity extends AppCompatActivity {
             dates[i] = findViewById(getResources().getIdentifier("detail_info_state_"+(i+1)+"_date", "id", getPackageName()));
             if(i!=4) views[i] = findViewById(getResources().getIdentifier("detail_info_state_"+(i+1)+"_bar", "id", getPackageName()));
         }
+    }
+
+    private void getData(String key){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Parcels").child(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber()).child(key);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot temp) {
+                ParcelModel parcel = new ParcelModel();
+                parcel.setParcelKey(temp.getKey());
+                parcel.setTitle(temp.child("title").getValue().toString());
+                parcel.setWaybill(temp.child("waybill").getValue().toString());
+                parcel.setFrom(new Person(temp.child("from").child("name").getValue().toString(), temp.child("from").child("time").getValue().toString()));
+                parcel.setTo(new Person(temp.child("to").child("name").getValue().toString(), temp.child("to").child("time").getValue().toString()));
+                parcel.setCarrier(
+                        new Carrier(
+                                temp.child("carrier").child("id").getValue().toString(),
+                                temp.child("carrier").child("name").getValue().toString(),
+                                temp.child("carrier").child("tel").getValue().toString(),
+                                temp.child("carrier").child("logo").getValue().toString(),
+                                temp.child("carrier").child("homepage").getValue().toString()
+                        )
+                );
+                Iterator<DataSnapshot> it2 = temp.child("progresses").getChildren().iterator();
+                List<Progress> progresses = new ArrayList<>();
+                while (it2.hasNext()) {
+                    DataSnapshot t = it2.next();
+                    Progress progress = new Progress();
+                    progress.setTime(t.child("time").getValue().toString());
+                    progress.setLocation(t.child("location").getValue().toString());
+                    progress.setStatus(new State(t.child("status").child("id").getValue().toString(), t.child("status").child("text").getValue().toString()));
+                    progress.setDescription(t.child("description").getValue().toString());
+                    progresses.add(progress);
+                }
+                parcel.setProgresses(progresses);
+                parcel.setAlarm(temp.child("alarm").getValue().toString().trim().equals("true"));
+                parcel.setState(
+                        new State(
+                                temp.child("state").child("id").getValue().toString(),
+                                temp.child("state").child("text").getValue().toString()
+                        ));
+
+                initViews(parcel);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void setListeners(){
@@ -122,10 +179,10 @@ public class TrackDetailActivity extends AppCompatActivity {
                     String desc = p.getDescription();
 
                     if(id.equals("in_transit")){
-                        if(desc.equals("발송")&&move){
+                        if(desc.contains("발송")&&move||desc.contains("이동")&&move){
                             dateList.add(dateConvert(p.getTime()));
                             move = false;
-                        }else if(desc.equals("도착")&&arrv){
+                        }else if(desc.contains("도착")&&arrv){
                             dateList.add(dateConvert(p.getTime()));
                             arrv = false;
                         }
@@ -136,6 +193,7 @@ public class TrackDetailActivity extends AppCompatActivity {
             }
             // View에 받아온 정보 반영하기
             Log.d("detail_size", dateList.size()+"");
+            Log.d("detail_list", dateList.toString());
             for(int i=1; i<dateList.size()-1; i++){
                 setState(i, false, dateList.get(i));
             }

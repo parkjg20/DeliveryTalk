@@ -8,13 +8,14 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import com.dataflow.deliverytalk.R;
+import com.dataflow.deliverytalk.util.AppDataControlService;
 import com.dataflow.deliverytalk.util.adapters.SwitchButton;
 
 public class ETCPushActivity extends AppCompatActivity {
     private ImageButton prevButton;
     private SwitchButton pushButton;
     private SwitchButton smsButton;
-    SharedPreferences appData;
+    AppDataControlService appData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +27,7 @@ public class ETCPushActivity extends AppCompatActivity {
         prevButton = findViewById(R.id.push_prevButton);
         pushButton = findViewById(R.id.push_pushAllowButton);
         smsButton = findViewById(R.id.push_smsAllowButton);
-        appData = getSharedPreferences("appData", MODE_PRIVATE);
+        appData = new AppDataControlService(getSharedPreferences("appData", MODE_PRIVATE));
         initView();
         setListeners();
     }
@@ -42,26 +43,22 @@ public class ETCPushActivity extends AppCompatActivity {
         pushButton.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
-                SharedPreferences.Editor edt = appData.edit();
-                edt.putBoolean("pushFlag", isChecked);
-                edt.apply();
+                appData.changeFlag("pushFlag", isChecked);
             }
         });
 
         smsButton.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
-                SharedPreferences.Editor edt = appData.edit();
-                edt.putBoolean("smsFlag", isChecked);
-                edt.apply();
+                appData.changeFlag("smsFlag", isChecked);
             }
         });
 
     }
 
     private void initView(){
-        smsButton.setChecked(appData.getBoolean("smsFlag",true));
-        pushButton.setChecked(appData.getBoolean("pushFlag",true));
+        smsButton.setChecked(appData.getSmsFlag());
+        pushButton.setChecked(appData.getPushFlag());
     }
 
 }

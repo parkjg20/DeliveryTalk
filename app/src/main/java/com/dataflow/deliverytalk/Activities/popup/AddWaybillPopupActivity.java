@@ -44,6 +44,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -58,6 +59,7 @@ public class AddWaybillPopupActivity extends AppCompatActivity {
     private TextView setCarrier;
     private EditText nickname;
 
+    private Button cancelButton;
     private Button submitButton;
     private String carrierCode;
     private boolean defaultAlarm;
@@ -83,6 +85,7 @@ public class AddWaybillPopupActivity extends AppCompatActivity {
         waybill = findViewById(R.id.addwaybill_waybill);
         nickname = findViewById(R.id.addwaybill_productNickname);
         setCarrier = findViewById(R.id.addwaybill_carrier);
+        cancelButton = findViewById(R.id.addwaybill_cancelButton);
         submitButton = findViewById(R.id.addwaybill_submitButton);
 
         defaultAlarm = appData.getBoolean("pushFlag", true);
@@ -115,12 +118,21 @@ public class AddWaybillPopupActivity extends AppCompatActivity {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Pattern ps = Pattern.compile("[0-9]*$");
+                Editable temp = waybill.getText();
+                if(!ps.matcher(temp.toString()).matches()){
+                    temp.delete(temp.length() - 1, temp.length());
+                    waybill.setText(temp);
+                    waybill.setError("숫자만 입력해주세요");
+                    waybill.setSelection(temp.length());
+                    return;
+                }
                 if(waybill.getText().length() > 9 && nickname.getText().length()>0){
                     submitButton.setEnabled(true);
                     submitButton.setBackgroundColor(Color.parseColor("#0DCCB5"));
                 }else{
                     submitButton.setEnabled(false);
-                    submitButton.setBackgroundColor(Color.parseColor("#DEDEDE"));
+                    submitButton.setBackgroundColor(Color.parseColor("#707070"));
                 }
             }
 
@@ -137,7 +149,7 @@ public class AddWaybillPopupActivity extends AppCompatActivity {
                     submitButton.setBackgroundColor(Color.parseColor("#0DCCB5"));
                 }else{
                     submitButton.setEnabled(false);
-                    submitButton.setBackgroundColor(Color.parseColor("#DEDEDE"));
+                    submitButton.setBackgroundColor(Color.parseColor("#707070"));
                 }
             }
 
@@ -154,6 +166,12 @@ public class AddWaybillPopupActivity extends AppCompatActivity {
             }
         });
 
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -225,7 +243,11 @@ public class AddWaybillPopupActivity extends AppCompatActivity {
                 parcelModel.setTitle(nickname.getText().toString());
                 parcelModel.setWaybill(waybill);
                 parcelModel.setFrom(new Person(json.getAsJsonObject("from").getAsJsonPrimitive("name").getAsString(), json.getAsJsonObject("from").getAsJsonPrimitive("time").getAsString()));
-                parcelModel.setTo(new Person(json.getAsJsonObject("to").getAsJsonPrimitive("name").getAsString(), json.getAsJsonObject("from").getAsJsonPrimitive("time").getAsString()));
+                String time = json.getAsJsonObject("from").getAsJsonPrimitive("time").getAsString();
+                if(time == null||time.isEmpty()){
+                    time = "0000-00-00T00:00:00+00:00";
+                }
+                parcelModel.setTo(new Person(json.getAsJsonObject("to").getAsJsonPrimitive("name").getAsString(), time));
                 parcelModel.setState(new State(json.getAsJsonObject("state").getAsJsonPrimitive("id").getAsString(), json.getAsJsonObject("state").getAsJsonPrimitive("text").getAsString()));
                 List<Progress> list = new ArrayList<>();
                 for(int i = 0; i < json.getAsJsonArray("progresses").size(); i++){

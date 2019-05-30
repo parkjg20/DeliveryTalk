@@ -57,26 +57,23 @@ public class ETCNoticeActivity extends Activity {
     }
 
     private void initViews(){
-        ref.child("log").setValue("check");
-
         mListView = findViewById(R.id.notice_notices);
         mListView.setAdapter(new NoticeListAdapter(ETCNoticeActivity.this, mGroupList));
     }
 
     // 데이터베이스 초기화
     private void initDatabase(){
-        ref.addValueEventListener(new ValueEventListener() {
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                for(int i = 1; i < dataSnapshot.getChildrenCount(); i++){
+                for( DataSnapshot t : dataSnapshot.getChildren()){
                     NoticeModel nModel = new NoticeModel();
-                    nModel.setTitle(dataSnapshot.child("" + i).child("title").getValue().toString());
-                    nModel.setWdate(dataSnapshot.child(""+i).child("wdate").getValue().toString());
-                    nModel.setContent(dataSnapshot.child(""+i).child("content").getValue().toString());
+                    nModel.setTitle(t.child("title").getValue().toString());
+                    nModel.setWdate(t.child("wdate").getValue().toString());
+                    nModel.setContent(t.child("content").getValue().toString());
                     mGroupList.add(nModel);
                 }
-                System.out.println(mGroupList.toString());
 
                 initViews();
             }
