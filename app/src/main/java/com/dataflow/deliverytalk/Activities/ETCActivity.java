@@ -1,8 +1,6 @@
 package com.dataflow.deliverytalk.Activities;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.dataflow.deliverytalk.R;
+import com.dataflow.deliverytalk.util.AppDataControlService;
 
 public class ETCActivity extends AppCompatActivity {
 
@@ -23,7 +22,7 @@ public class ETCActivity extends AppCompatActivity {
     private ConstraintLayout push;
     private ConstraintLayout info;
 
-    private TextView phonenumber;
+    private TextView phoneNumber;
     private ImageButton prevButton;
 
     @Override
@@ -43,10 +42,13 @@ public class ETCActivity extends AppCompatActivity {
         push = findViewById(R.id.etc_setpush);
         info = findViewById(R.id.etc_info);
 
-        phonenumber = findViewById(R.id.etc_phonenumberText);
+        phoneNumber = findViewById(R.id.etc_phonenumberText);
 
-        SharedPreferences appData =  getSharedPreferences("appData",  MODE_PRIVATE);
-        phonenumber.setText(appData.getString("phonenumber","정보없음"));
+        AppDataControlService appData = new AppDataControlService(getSharedPreferences("appData",  MODE_PRIVATE));
+        if(appData.getPhoneNumber().length() == 10){
+            appData.setPhoneNumber("0"+appData.getPhoneNumber());
+        }
+        phoneNumber.setText(appData.getPhoneNumber());
         prevButton = findViewById(R.id.etc_prevButton);
 
         myProfile.setOnClickListener(new View.OnClickListener() {
@@ -100,4 +102,5 @@ public class ETCActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
+
 }

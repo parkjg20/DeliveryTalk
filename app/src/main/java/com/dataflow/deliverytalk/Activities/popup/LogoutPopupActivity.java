@@ -1,6 +1,5 @@
 package com.dataflow.deliverytalk.Activities.popup;
 
-import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +11,10 @@ import android.widget.Button;
 
 import com.dataflow.deliverytalk.Models.User;
 import com.dataflow.deliverytalk.R;
+import com.dataflow.deliverytalk.util.AppDataControlService;
 import com.dataflow.deliverytalk.util.retrofit.CloudFunctionsRetrofit;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -30,7 +32,6 @@ public class LogoutPopupActivity extends AppCompatActivity {
     private Button yesButton;
     private Button noButton;
 
-    private SharedPreferences appData;
     private FirebaseAuth auth;
 
     // 더블 클릭 방지
@@ -50,7 +51,6 @@ public class LogoutPopupActivity extends AppCompatActivity {
 
         yesButton = findViewById(R.id.logoutPopup_yes);
         noButton = findViewById(R.id.logoutPopup_no);
-        appData = getSharedPreferences("appData", MODE_PRIVATE);
         auth = FirebaseAuth.getInstance();
 
 
@@ -65,16 +65,31 @@ public class LogoutPopupActivity extends AppCompatActivity {
                     res.enqueue(new Callback() {
                         @Override
                         public void onResponse(Call call, Response response) {
-                            Log.d("success", "suceess");
-                            SharedPreferences.Editor e = appData.edit();
-                            e.putString("phonenumber", null);
-                            e.putBoolean("isLogin", false);
-                            e.commit();
+                            Log.d("success", "success");
+                            final String phoneNumber = user.getPhoneNumber();
+                            final AppDataControlService appData = new AppDataControlService(getSharedPreferences("appData", MODE_PRIVATE));
                             FirebaseDatabase.getInstance(databaseUrl).getReference("Parcels").child(user.getPhoneNumber()).removeValue();
-                            FirebaseDatabase.getInstance().getReference("Token").addListenerForSingleValueEvent(new ValueEventListener() {
+                            FirebaseDatabase.getInstance().getReference("Tokens").addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    FirebaseDatabase.getInstance().getReference("Messages").child(dataSnapshot.child(user.getPhoneNumber()).getValue().toString()).removeValue();
+                                    String token = dataSnapshot.child(phoneNumber).getValue().toString();
+                                    Log.d("logout_innerif_token", dataSnapshot.getValue().toString());
+                                    FirebaseDatabase.getInstance().getReference("Messages").child(token).removeValue()
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Log.d("logout_messageDelete", "success");
+                                                        FirebaseDatabase.getInstance().getReference("Tokens").child(phoneNumber).removeValue();
+                                                        appData.setPhoneNumber(null);
+                                                        appData.changeFlag("isLogin", false);
+                                                        ActivityCompat.finishAffinity(LogoutPopupActivity.this);
+                                                        System.exit(0);
+                                                    } else {
+                                                        Log.d("logout", "failed");
+                                                    }
+                                                }
+                                            });
                                 }
 
                                 @Override
@@ -82,8 +97,8 @@ public class LogoutPopupActivity extends AppCompatActivity {
 
                                 }
                             });
-                            ActivityCompat.finishAffinity(LogoutPopupActivity.this);
-                            System.exit(0);
+
+
                         }
 
                         @Override

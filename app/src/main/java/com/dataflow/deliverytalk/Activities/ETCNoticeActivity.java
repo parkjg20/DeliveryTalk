@@ -18,12 +18,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class ETCNoticeActivity extends Activity {
 
     DatabaseReference ref;
     private ArrayList<NoticeModel> mGroupList;
-    private ArrayList<String> mChildList;
     private ExpandableListView mListView;
 
     private ImageButton prevButton;
@@ -40,7 +40,6 @@ public class ETCNoticeActivity extends Activity {
 
         prevButton = findViewById(R.id.notice_prevButton);
         mGroupList = new ArrayList<NoticeModel>();
-        mChildList = new ArrayList<String>();
 
         ref = FirebaseDatabase.getInstance("https://deliverytalk-31595.firebaseio.com").getReference("Notice");
         initDatabase();
@@ -74,7 +73,7 @@ public class ETCNoticeActivity extends Activity {
                     nModel.setContent(t.child("content").getValue().toString());
                     mGroupList.add(nModel);
                 }
-
+                Collections.reverse(mGroupList);
                 initViews();
             }
 

@@ -3,7 +3,6 @@ package com.dataflow.deliverytalk.Activities;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,7 +11,6 @@ import android.widget.ListView;
 
 import com.dataflow.deliverytalk.Models.Carrier;
 import com.dataflow.deliverytalk.R;
-import com.dataflow.deliverytalk.util.adapters.CarrierListAdapter;
 import com.dataflow.deliverytalk.util.adapters.CarrierSelectListAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

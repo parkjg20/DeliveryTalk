@@ -1,55 +1,34 @@
 package com.dataflow.deliverytalk.Activities;
 
-import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
-import com.dataflow.deliverytalk.Activities.popup.CarrierTelPopupActivity;
 import com.dataflow.deliverytalk.Models.Carrier;
-import com.dataflow.deliverytalk.Models.ParcelModel;
 import com.dataflow.deliverytalk.R;
 import com.dataflow.deliverytalk.util.adapters.CarrierListAdapter;
-import com.dataflow.deliverytalk.util.adapters.ParcelListAdapter;
-import com.dataflow.deliverytalk.util.retrofit.ParcelTrackingRetrofit;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class ETCCarriersActivity extends AppCompatActivity {
 
-    private final String databaseUrl = "https://deliverytalk-31595.firebaseio.com";
     private ListView listview;
 
     private List<Carrier> carriers;
     private FirebaseFirestore db;
-    private FirebaseFirestoreSettings settings;
 
     private ImageButton prevButton;
 

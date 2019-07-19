@@ -2,27 +2,16 @@ package com.dataflow.deliverytalk.Activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
-
-import com.dataflow.deliverytalk.Activities.popup.EventDialogPopup;
 import com.dataflow.deliverytalk.R;
-
-import java.net.HttpURLConnection;
-import java.net.InetAddress;
-import java.net.URL;
 
 public class IntroActivity extends AppCompatActivity {
 
-    public static final String CONNECTION_CONFIRM_CLIENT_URL = "http://clients3.google.com/generate_204";
+//    public static final String CONNECTION_CONFIRM_CLIENT_URL = "http://clients3.google.com/generate_204";
     private SharedPreferences appData;
     private Boolean isLogin;
 

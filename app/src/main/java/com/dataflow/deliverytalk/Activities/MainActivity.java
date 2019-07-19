@@ -20,6 +20,7 @@ import com.dataflow.deliverytalk.Activities.popup.AddWaybillPopupActivity;
 import com.dataflow.deliverytalk.Activities.popup.EventDialogPopup;
 import com.dataflow.deliverytalk.Models.AlarmModel;
 import com.dataflow.deliverytalk.Models.Carrier;
+import com.dataflow.deliverytalk.Models.Location;
 import com.dataflow.deliverytalk.Models.ParcelModel;
 import com.dataflow.deliverytalk.Models.Person;
 import com.dataflow.deliverytalk.Models.Progress;
@@ -40,17 +41,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final String databaseUrl = "https://deliverytalk-31595.firebaseio.com";
     private final String phone = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
     private ConstraintLayout gotoEtc;
     private ConstraintLayout gotoST;
@@ -434,7 +430,7 @@ public class MainActivity extends AppCompatActivity {
             DataSnapshot t = it2.next();
             Progress progress = new Progress();
             progress.setTime(t.child("time").getValue().toString());
-            progress.setLocation(t.child("location").getValue().toString());
+            progress.setLocation(new Location(t.child("location").child("name").getValue().toString()));
             progress.setStatus(new State(t.child("status").child("id").getValue().toString(), t.child("status").child("text").getValue().toString()));
             progress.setDescription(t.child("description").getValue().toString());
             progresses.add(progress);

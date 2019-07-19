@@ -25,7 +25,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText phoneText;
     private ImageButton nextButton;
     private ImageButton prevButton;
-    private String phonenumber;
+    private String phoneNumber;
 
     InputMethodManager imm;
     private boolean doubleClick= false;
@@ -49,14 +49,14 @@ public class LoginActivity extends AppCompatActivity {
         prevButton = findViewById(R.id.login_prevButton);
 
         phoneText = (EditText) findViewById(R.id.login_phoneText);
-        phonenumber = getIntent().getStringExtra("phonenumber");
+        phoneNumber = getIntent().getStringExtra("phonenumber");
 
         // 전화번호 초기화
-        if(phonenumber != null ||!phonenumber.equals("")) {
-            if(phonenumber.startsWith("+82")){
-                phonenumber = phonenumber.substring(2);
+        if(phoneNumber != null ||!phoneNumber.equals("")) {
+            if(phoneNumber.startsWith("+82")){
+                phoneNumber = phoneNumber.substring(2);
             }
-            phoneText.setText(phonenumber);
+            phoneText.setText(phoneNumber);
         }
 
         setListeners();
@@ -118,15 +118,15 @@ public class LoginActivity extends AppCompatActivity {
                     doubleClick = true;
                     if(nextButton.isEnabled()){
                         String code = "82";
-                        phonenumber = phoneText.getText().toString().trim();
-                        if(phonenumber.equals("16505551234")){
-                            phonenumber = "+16505551234";
+                        phoneNumber = phoneText.getText().toString().trim();
+                        if(phoneNumber.equals("16505551234")){
+                            phoneNumber = "+16505551234";
                         }else{
-                            phonenumber = "+"+code+phonenumber.substring(1);
+                            phoneNumber = "+"+code+phoneNumber.substring(1);
                         }
 
                         Intent intent = new Intent(LoginActivity.this, VerifyActivity.class );
-                        intent.putExtra("phonenumber", phonenumber);
+                        intent.putExtra("phoneNumber", phoneNumber);
                         startActivity(intent);
                     }
                     doubleClick = false;

@@ -24,4 +24,13 @@ public class AppDataControlService {
         edit.apply();
     }
 
+    public String getPhoneNumber(){
+        return appData.getString("phoneNumber","정보없음");
+    }
+
+    public void setPhoneNumber(String phoneNumber){
+        edit.putString("phoneNumber",phoneNumber);
+        edit.apply();
+    }
+
 }

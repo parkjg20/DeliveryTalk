@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 public class Progress implements Parcelable {
     String time;
-    String location;
+    Location location;
     State status;
     String description;
 
@@ -13,7 +13,7 @@ public class Progress implements Parcelable {
 
     protected Progress(Parcel in){
         time = in.readString();
-        location = in.readString();
+        location = in.readParcelable(Location.class.getClassLoader());
         status = in.readParcelable(State.class.getClassLoader());
         description = in.readString();
     }
@@ -38,7 +38,7 @@ public class Progress implements Parcelable {
     @Override
     public void writeToParcel(Parcel in, int flags) {
         in.writeString(time);
-        in.writeString(location);
+        in.writeParcelable(location, flags);
         in.writeParcelable(status, flags);
         in.writeString(description);
     }
@@ -51,11 +51,11 @@ public class Progress implements Parcelable {
         this.time = time;
     }
 
-    public String getLocation() {
+    public Location getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(Location location) {
         this.location = location;
     }
 
@@ -75,4 +75,13 @@ public class Progress implements Parcelable {
         this.description = description;
     }
 
+    @Override
+    public String toString() {
+        return "Progress{" +
+                "time='" + time + '\'' +
+                ", location='" + location + '\'' +
+                ", status=" + status +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }

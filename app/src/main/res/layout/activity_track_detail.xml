@@ -459,6 +459,19 @@
         app:layout_constraintBottom_toTopOf="@id/detail_messageForm">
 
 
+        <ListView
+            android:id="@+id/tracklist_progressList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:divider="#FAFAFA"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            >
+
+        </ListView>
+
+
     </android.support.constraint.ConstraintLayout>
     <android.support.constraint.ConstraintLayout
         android:id="@+id/detail_messageForm"

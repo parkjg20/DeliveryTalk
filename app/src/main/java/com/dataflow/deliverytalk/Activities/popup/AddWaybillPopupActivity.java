@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.dataflow.deliverytalk.Activities.SelectCarrierActivity;
 import com.dataflow.deliverytalk.Models.Carrier;
+import com.dataflow.deliverytalk.Models.Location;
 import com.dataflow.deliverytalk.Models.ParcelModel;
 import com.dataflow.deliverytalk.Models.Person;
 import com.dataflow.deliverytalk.Models.Progress;
@@ -31,7 +32,6 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -41,9 +41,7 @@ import com.google.gson.JsonObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 import retrofit2.Call;
@@ -127,24 +125,7 @@ public class AddWaybillPopupActivity extends AppCompatActivity {
                     waybill.setSelection(temp.length());
                     return;
                 }
-                if(waybill.getText().length() > 9 && nickname.getText().length()>0){
-                    submitButton.setEnabled(true);
-                    submitButton.setBackgroundColor(Color.parseColor("#0DCCB5"));
-                }else{
-                    submitButton.setEnabled(false);
-                    submitButton.setBackgroundColor(Color.parseColor("#707070"));
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {}
-        });
-        nickname.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(waybill.getText().length() > 9 && nickname.getText().length()>0){
+                if(waybill.getText().length() > 9 ){
                     submitButton.setEnabled(true);
                     submitButton.setBackgroundColor(Color.parseColor("#0DCCB5"));
                 }else{
@@ -177,6 +158,7 @@ public class AddWaybillPopupActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(!doubleClick){
                     doubleClick = true;
+                    submitButton.setEnabled(false);
                     if(setCarrier.getText().equals("택배사를 선택해주세요.")){
                         setCarrier.setError("택배사를 선택해주세요");
                         doubleClick = false;
@@ -205,6 +187,7 @@ public class AddWaybillPopupActivity extends AppCompatActivity {
                     intent.putExtra("content","운송장 등록에 실패했습니다.");
                     startActivity(intent);
                 }
+                submitButton.setEnabled(true);
                 doubleClick = false;
             }
         });
@@ -240,7 +223,11 @@ public class AddWaybillPopupActivity extends AppCompatActivity {
                     return;
                 }
                 JsonObject json = response.body();
-                parcelModel.setTitle(nickname.getText().toString());
+                String name = "[상품명 없음]";
+                if(!nickname.getText().toString().isEmpty()){
+                    name = nickname.getText().toString();
+                }
+                parcelModel.setTitle(name);
                 parcelModel.setWaybill(waybill);
                 parcelModel.setFrom(new Person(json.getAsJsonObject("from").getAsJsonPrimitive("name").getAsString(), json.getAsJsonObject("from").getAsJsonPrimitive("time").getAsString()));
                 String time = json.getAsJsonObject("from").getAsJsonPrimitive("time").getAsString();
@@ -255,7 +242,7 @@ public class AddWaybillPopupActivity extends AppCompatActivity {
                     JsonObject jary = (JsonObject) json.getAsJsonArray("progresses").get(i);
                     progress.setTime(jary.getAsJsonPrimitive("time").getAsString());
                     progress.setDescription(jary.getAsJsonPrimitive("description").getAsString());
-                    progress.setLocation(jary.getAsJsonObject("location").getAsJsonPrimitive("name").getAsString());
+                    progress.setLocation(new Location(jary.getAsJsonObject("location").getAsJsonPrimitive("name").getAsString()));
                     progress.setStatus(new State(jary.getAsJsonObject("status").getAsJsonPrimitive("id").getAsString(),jary.getAsJsonObject("status").getAsJsonPrimitive("text").getAsString()));
                     list.add(progress);
                 }

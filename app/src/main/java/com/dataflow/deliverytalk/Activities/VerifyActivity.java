@@ -26,6 +26,7 @@ import com.dataflow.deliverytalk.Models.Person;
 import com.dataflow.deliverytalk.Models.Progress;
 import com.dataflow.deliverytalk.Models.State;
 import com.dataflow.deliverytalk.R;
+import com.dataflow.deliverytalk.util.AppDataControlService;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskExecutors;
@@ -49,7 +50,7 @@ public class VerifyActivity extends AppCompatActivity {
     private EditText verifyCode;
     private ImageButton prevButton;
     private ImageButton nextButton;
-    private String phonenumber;
+    private String phoneNumber;
 
     // firebase auth
     private FirebaseAuth mAuth;
@@ -84,19 +85,19 @@ public class VerifyActivity extends AppCompatActivity {
         nextButton.setEnabled(false);
 
         verifyTimer.bringToFront();
-        phonenumber = getIntent().getStringExtra("phonenumber");
-        Log.d("phone", "message"+phonenumber);
-        if(phonenumber.isEmpty()||phonenumber.length() < 1){
-            Log.e("error", "phonenumber is invalid");
+        phoneNumber = getIntent().getStringExtra("phoneNumber");
+        Log.d("phone", "message"+phoneNumber);
+        if(phoneNumber.isEmpty()||phoneNumber.length() < 1){
+            Log.e("error", "phoneNumber is invalid");
             finish();
         }
-        ref = FirebaseDatabase.getInstance(databaseUrl).getReference("Parcels").child(phonenumber);
+        ref = FirebaseDatabase.getInstance(databaseUrl).getReference("Parcels").child(phoneNumber);
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         mAuth = FirebaseAuth.getInstance();
 
         setListeners();
 
-        sendVerificationCode(phonenumber);
+        sendVerificationCode(phoneNumber);
         countDownTimer = new CountDownTimer(120000, 1000) {
             public void onTick(long millisUntilFinished) {
                 verifyTimer.setText(String.format(((((millisUntilFinished % 60000L)/1000)/10>0)?"%d:%d":"%d:0%d"),( millisUntilFinished / 60000L), (millisUntilFinished % 60000L)/1000));
@@ -241,12 +242,11 @@ public class VerifyActivity extends AppCompatActivity {
     };
 
     public void saveUserLogin(){
-        appData = getSharedPreferences("appData", MODE_PRIVATE);
-        SharedPreferences.Editor editor = appData.edit();
-        editor.putBoolean("isLogin", true);
-        phonenumber = phonenumber.replace("+82", "");
-        editor.putString("phonenumber", phonenumber);
-        editor.apply();
+        AppDataControlService appData = new AppDataControlService(getSharedPreferences("appData", MODE_PRIVATE));
+
+        appData.changeFlag("isLogin", true);
+        phoneNumber = phoneNumber.replace("+82", "0");
+        appData.setPhoneNumber(phoneNumber);
     }
 
 

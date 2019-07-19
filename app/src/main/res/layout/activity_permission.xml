@@ -77,8 +77,8 @@
 
             <CheckBox
                 android:id="@+id/permission_service_button"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginRight="7dp"
                 android:button="@drawable/service_btn_check" />
 
@@ -136,8 +136,8 @@
 
             <CheckBox
                 android:id="@+id/permission_private_button"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginRight="7dp"
                 android:button="@drawable/service_btn_check" />
 
@@ -188,8 +188,8 @@
                     <TextView android:text="보유 및 이용기간" />
                 </TableRow>
                 <TableRow>
-                    <TextView android:text="CJ대한통운" />
-                    <TextView android:text="송수화인의 운송장 번호" />
+                    <TextView android:text="CJ대한통운,우체국\nCU편의점택배,로젠택배\n롯데택배,GS postbox\n한진택배" />
+                    <TextView android:text="송수화인의 운송장 번호" android:layout_height="match_parent" android:textAlignment="center"/>
                     <TextView android:text="배송조회" />
                     <TextView android:text="서비스 이용목적 달성시까지" />
                 </TableRow>
@@ -220,19 +220,19 @@
                 android:paddingRight="9dp"
                 android:paddingBottom="7dp" />
 
-                <TableLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-                    <TableRow android:background="#DEDEDE">
-                        <TextView android:text="개인정보보호 담당부서" />
-                        <TextView android:text="개인정보 관리책임자"/>
-                    </TableRow>
-                    <TableRow>
-                        <TextView android:text="- 담당: 개인정보보호팀\n- 전화: 070-4366-3299\n- 메일 : jhjeong@data-flow.co.kr" />
-                        <TextView android:text="- 담당: 개인정보보호팀\n- 전화: 070-4366-3299\n- 메일 : jhjeong@data-flow.co.kr" />
-                    </TableRow>
-                </TableLayout>
+                <TableRow android:background="#DEDEDE">
+                    <TextView android:text="개인정보보호 담당부서" />
+                    <TextView android:text="개인정보 관리책임자"/>
+                </TableRow>
+                <TableRow>
+                    <TextView android:text="- 담당: 개인정보보호팀\n- 전화: 070-4366-3299\n- 메일 : jhjeong@data-flow.co.kr" />
+                    <TextView android:text="- 담당: 개인정보보호팀\n- 전화: 070-4366-3299\n- 메일 : jhjeong@data-flow.co.kr" />
+                </TableRow>
+            </TableLayout>
 
             <TextView
                 android:id="@+id/permission_private_term3"
@@ -267,8 +267,8 @@
 
         <CheckBox
             android:id="@+id/permission_sms_button"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:button="@drawable/service_btn_check" />
 
         <TextView

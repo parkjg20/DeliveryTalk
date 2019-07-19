@@ -3,14 +3,11 @@ package com.dataflow.deliverytalk.Activities;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -25,7 +22,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,13 +48,6 @@ public class TrackModifyActivity extends AppCompatActivity {
     DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Parcels").child(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        setResult(2, intent);
-        finish();
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_modify);
@@ -81,6 +70,13 @@ public class TrackModifyActivity extends AppCompatActivity {
 
         addAdapter(false);
         addListeners();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        setResult(2, intent);
+        finish();
     }
 
 
